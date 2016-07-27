@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>1Qubit ltX</title>
+        <link rel="icon" href="images/favicon.ico" type="image/gif" sizes="16x16">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script type="text/javascript" src="js/fsearch.js"></script>
+        <script type="text/javascript" src="js/initMap.js"></script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDQ83TAYpMTZv3AN1dxmcoo0Gp4nRRk2xM&sensor=false"></script>
+        <script>
+			$(document).ready(function(){
+				initMap();
+				$('#search-text').fsearch();
+			});
+		</script>
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+		<div id="wrapper">
+			<div id="floating-panel">
+	      		<input id = "rawDataButton" onclick="toggleRawPoints();" type = button value="Raw Location" class = "standardbutton">
+	      		<input id = "snappedDataButton" onclick="toggleSnappedPoints();" type = button value="Snapped Location" class = "standardbutton">
+	      		<input id = "calculatedRouteButton" onclick="toggleCalculatedRoute();" type = button value="Processing Calculated Route" class = "standardMutebutton">
+	      		<input id = "googleRouteButton" onclick="toggleGoogleRoute();" type = button value="Processing Google Route" class = "standardMutebutton">
+	    	</div>
+			<div id="map">
+			</div>
+			<img id="logo" src="images/logo.png">
+			</div>
+			<div id="search">
+				<input id="search-text" autocomplete="off" autofocus="" name="search_query" value="" type="text" tabindex="1" 
+				placeholder="Search for Vehicle, Driver.." title="Search" spellcheck="false" style="outline: none;">
+				<i id="search-button" class="fa fa-search"></i>
+				<div id="divResult">
+			</div>
+		</div>
+    </body>
+</html>
