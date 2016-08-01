@@ -188,17 +188,22 @@ function drawSimplePolylineWithRawPoints(response){
   for(var l = 0; l < rawPoints.length; l++){
 	  var locationJson = rawPoints[l];
 	  latLngArray.push(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));
-	  snappedLatLngArray.push(new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude));
-	  vehicleBounds.extend(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));
 	  
-	  
-	  
+	  var marker;
 	  var image = 'images/almost_transparent.png';
-	  var marker=new google.maps.Marker({
-		  //position:new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude),
-		  position:new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude),
-		  icon:image
-	  });
+	  if(locationJson.snappedLatitude > 0 && locationJson.snappedLongitude > 0){
+		  snappedLatLngArray.push(new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude));
+		  marker=new google.maps.Marker({
+			  position:new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude),
+			  icon:image
+		  });
+	  } else {
+		  marker=new google.maps.Marker({
+			  position:new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude),
+			  icon:image
+		  });
+	  }
+	  vehicleBounds.extend(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));  
 
 	  marker.setMap(map);
 
@@ -210,7 +215,7 @@ function drawSimplePolylineWithRawPoints(response){
 			  prefix = "End - ";
 		  addMarker(marker, prefix + locationJson.mTime, true); //show fixed markers for 1st and last point
 	  } else {
-		  addMarker(marker, locationJson.mTime, false);	//show temp marker for other points
+		  addMarker(marker, locationJson.mTime+"\nSpeed - "+(locationJson.mSpeed * 3.6)+" kmph", false);	//show temp marker for other points
 	  }
 	  
   }
@@ -218,55 +223,64 @@ function drawSimplePolylineWithRawPoints(response){
 	  path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
   };
   
-  if(path!=null){
-	  path.setMap(null);
-  }
-  path = new google.maps.Polyline({
-	  path:latLngArray,
-	  strokeColor:"#FF0000",
-	  strokeOpacity:0.8,
-	  strokeWeight:3,
-	  icons: [{
-            icon: arrow,
-            repeat:'300px',
-            offset: '100%'}]
-	  });
-  
-  if(showingRawPoints){
-	  showingRawPoints = false;
-	  toggleRawPoints();
-	  path.setMap(map);
-  } else {
-	  showingRawPoints = true;
-	  toggleRawPoints();
-	  path.setMap(null);
+  if(latLngArray.length > 0){
+	  if(path!=null){
+		  path.setMap(null);
+	  }
+	  path = new google.maps.Polyline({
+		  path:latLngArray,
+		  strokeColor:"#FF0000",
+		  strokeOpacity:0.8,
+		  strokeWeight:3,
+		  icons: [{
+	            icon: arrow,
+	            repeat:'300px',
+	            offset: '100%'}]
+		  });
+	  
+	  if(showingRawPoints){
+		  showingRawPoints = false;
+		  toggleRawPoints();
+		  path.setMap(map);
+	  } else {
+		  showingRawPoints = true;
+		  toggleRawPoints();
+		  path.setMap(null);
+	  }
   }
   //path.setMap(map);
   
-  if(snappedPath!=null){
-	  snappedPath.setMap(null);
-  }
-  snappedPath = new google.maps.Polyline({
-	  path:snappedLatLngArray,
-	  strokeColor:"#0000FF",
-	  strokeOpacity:0.8,
-	  strokeWeight:3,
-	  icons: [{
-            icon: arrow,
-            repeat:'300px',
-            offset: '100%'}]
-	  });
+
+  if(snappedLatLngArray.length > 0){
+	  
+	  if(snappedPath!=null){
+		  snappedPath.setMap(null);
+	  }
+
+	  
+	  snappedPath = new google.maps.Polyline({
+		  path:snappedLatLngArray,
+		  strokeColor:"#0000FF",
+		  strokeOpacity:0.8,
+		  strokeWeight:3,
+		  icons: [{
+	            icon: arrow,
+	            repeat:'300px',
+	            offset: '100%'}]
+		  });
   
-  
-  if(showingSnappedPoints){
-	  showingSnappedPoints = false;
-	  toggleSnappedPoints();
-	  snappedPath.setMap(map);
-  } else {
-	  showingSnappedPoints = true;
-	  toggleSnappedPoints();
-	  snappedPath.setMap(null);
+	  if(showingSnappedPoints){
+		  showingSnappedPoints = false;
+		  toggleSnappedPoints();
+		  snappedPath.setMap(map);
+	  } else {
+		  showingSnappedPoints = true;
+		  toggleSnappedPoints();
+		  snappedPath.setMap(null);
+	  }
+	  
   }
+  
   
   //snappedPath.setMap(map);
   if(!mapBoundingDone){

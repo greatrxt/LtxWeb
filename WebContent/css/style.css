@@ -40,7 +40,7 @@ html, body, #map, #wrapper {
     padding: 10px 12px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display: none;
     font-size: 13px;
     font-weight:bold;
 	font-family: helvetica, arial, sans-serif;
