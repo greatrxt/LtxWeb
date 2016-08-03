@@ -12,6 +12,7 @@ html, body, #map, #wrapper {
     border: none;
     color: white;
     padding: 10px 12px;
+    border-radius:2px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -20,10 +21,26 @@ html, body, #map, #wrapper {
 	font-family: helvetica, arial, sans-serif;
 }
 
+.standardAdminbutton {
+	background-color: #4285f4; /* Blue */
+    border: none;
+    border-radius:2px;
+    color: white;
+    padding: 10px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    font-weight:bold;
+	font-family: helvetica, arial, sans-serif;
+}
+
+
 .standardNegativebutton {
 	background-color: #e32636; /* Red */
     border: none;
     color: white;
+    border-radius:2px;
     padding: 10px 12px;
     text-align: center;
     text-decoration: none;
@@ -45,6 +62,7 @@ html, body, #map, #wrapper {
     font-weight:bold;
 	font-family: helvetica, arial, sans-serif;
 }
+
 
 #floating-panel {
         position: absolute;

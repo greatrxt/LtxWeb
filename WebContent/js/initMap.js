@@ -12,6 +12,7 @@ var osrmLatLngArray = new Array();
 var googleLatLngArray = new Array();
 var osrmLimit = 90;
 var vehicleBounds;
+const min_speed = 1;
 var osrmRequestCounter, osrmResponseCounter, osrmFinalResponseIndex;
 /**
  * Loads data from status endpoint
@@ -24,7 +25,7 @@ function loadDataOnMap(map) {
   mapBoundingDone = false;
   fetchVehicleData();
   setInterval(function(){
-	  fetchVehicleData();
+	  //fetchVehicleData();
   }, 20000);
 }
 
@@ -42,8 +43,8 @@ function fetchVehicleData(){
 	          //buildPathsWithoutSnapping(response);
 	          if(Object.keys(response.location).length > 0){
 	        	  drawSimplePolylineWithRawPoints(response);
-	        	  snapLatLngToRoadUsingGoogleRoadsApi(response);
-		          snapLatLngToRoadUsingOsrmRoadsApi(response);
+	        	  //snapLatLngToRoadUsingGoogleRoadsApi(response);
+		          //snapLatLngToRoadUsingOsrmRoadsApi(response);
 	          } else {
 	        	  alert("No data");
 	          }
@@ -74,11 +75,17 @@ function snapLatLngToRoadUsingGoogleRoadsApi(response) {
 	  var url = "https://roads.googleapis.com/v1/snapToRoads?key=AIzaSyCl660yK9AKtjaTj3xYwVksX7YWFJ9tni4&path=";
 	  
 	  for(var l = begin; l < end; l++){
-		url+=locationArray[l].mLatitude+","+locationArray[l].mLongitude;
-		if((l+1) != end){
-			url+="|";
+		if(locationArray[l].mSpeed > min_speed){
+			url+=locationArray[l].mLatitude+","+locationArray[l].mLongitude;
+			if((l+1) != end){
+				url+="|";
+			}
 		}
 	  }	 
+	  
+	  if(url.charAt(url.length - 1) === '|'){
+		  url = url.substring(0, url.length -1);
+	  }
 	  
 	  makeRequestAndProcessResponse = function(url, callback, allCoordinatesAdded){
 		  var xmlhttp = new XMLHttpRequest();
@@ -140,13 +147,19 @@ function snapLatLngToRoadUsingOsrmRoadsApi(response) {
 	  var url = "http://127.0.0.1:5000/match/v1/driving/";
 	  
 	  for(var l = begin; l < end; l++){
-		url+=locationArray[l].mLongitude+","+locationArray[l].mLatitude;
-		if((l+1) != end){
-			url+=";";
-		}
+		  if(locationArray[l].mSpeed > min_speed){
+				url+=locationArray[l].mLongitude+","+locationArray[l].mLatitude;
+				if((l+1) != end){
+					url+=";";
+				}
+		  } else {
+			  console.log("OSRM ignoring "+locationArray[l].mSpeed);
+		  }
 	  }
 	 
-	  
+	  if(url.charAt(url.length - 1) === ';'){
+		  url = url.substring(0, url.length -1);
+	  }
 	  makeRequestAndProcessOsrmResponse = function(url, callback, allCoordinatesAdded, osrmRequestCounter){
 		  var xmlhttp = new XMLHttpRequest();
 	       xmlhttp.onreadystatechange = function() {
@@ -186,12 +199,11 @@ function drawSimplePolylineWithRawPoints(response){
   var snappedLatLngArray = new Array();
   vehicleBounds = new google.maps.LatLngBounds();
   for(var l = 0; l < rawPoints.length; l++){
-	  var locationJson = rawPoints[l];
-	  latLngArray.push(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));
-	  
+	  var locationJson = rawPoints[l];	  
 	  var marker;
 	  var image = 'images/almost_transparent.png';
-	  if(locationJson.snappedLatitude > 0 && locationJson.snappedLongitude > 0){
+	  if(locationJson.snappedLatitude > 0 && locationJson.snappedLongitude > 0 && locationJson.mSpeed > min_speed){
+		  latLngArray.push(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));
 		  snappedLatLngArray.push(new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude));
 		  marker=new google.maps.Marker({
 			  position:new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude),

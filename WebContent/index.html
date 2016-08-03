@@ -9,6 +9,7 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script type="text/javascript" src="js/fsearch.js"></script>
         <script type="text/javascript" src="js/initMap.js"></script>
+        <script type="text/javascript" src="js/modals.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDQ83TAYpMTZv3AN1dxmcoo0Gp4nRRk2xM&sensor=false"></script>
         <script>
 			$(document).ready(function(){
@@ -46,10 +47,13 @@
 			    
 			    loadDataOnMap(map);
 				$('#search-text').fsearch();
+				
+
 			});
 		</script>
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/modal-style.css">
     </head>
     <body>
 		<div id="wrapper">
@@ -59,6 +63,66 @@
 	      		<input id = "calculatedRouteButton" onclick="toggleCalculatedRoute();" type = button value="Processing Calculated Route" class = "standardMutebutton">
 	      		<input id = "googleRouteButton" onclick="toggleGoogleRoute();" type = button value="Processing Google Route" class = "standardMutebutton">
 	    	</div>
+	    	
+	    	<div id="admin-floating-panel">
+	    		<input id="openVehicleModalButton" type = button onclick="openVehicleModal()" value="Add Vehicle" class = "standardAdminbutton">
+	    		<input id="openDriverModalButton" type = button onclick="openDriverModal()" value="Add Driver" class = "standardAdminbutton">
+	    	</div>
+	    	
+
+			<!-- The Modal -->
+			<div id="driverModal" class="modal">
+			
+			<form method="post" action="http://localhost:8080/AngelTwo/rest/driver/form" enctype="multipart/form-data">
+						  <!-- Modal content -->
+			  <div class="modal-content">
+			    <div class="modal-header">
+			      <span class="close" onclick="closeVehicleModal()">×</span>
+			      <h2>Add Driver</h2>
+			    </div>
+			    <div class="modal-body">
+					<div class="modal-form">
+						<input id="driver-name" type="text" tabindex="1" 
+							placeholder="Name" style="outline: none;" class="modal-text">
+						
+	
+					    <input id="driver-username" type="text" tabindex="1" 
+							placeholder="Username" style="outline: none;" class="modal-text">
+						
+						
+						<input id="driver-password" type="password" tabindex="1" 
+							placeholder="Password" style="outline: none;" class="modal-text">
+						
+						
+						<input id="driver-confirmpassword" type="password" tabindex="1" 
+							placeholder="Confirm Password" style="outline: none;" class="modal-text">
+						
+						
+						<input id="driver-contact" type="text" tabindex="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+							placeholder="Contact Number" style="outline: none;" class="modal-text">
+						
+						<!-- http://stackoverflow.com/questions/25018653/remove-placeholder-from-date-type-input-in-chrome -->
+						<input id="driver-doj" type="text" tabindex="1" onfocus="(this.type='date')" onfocusout="(this.type='text')" 
+							placeholder="Date Of Joining" style="outline: none;" class="modal-text">
+						
+					</div>
+ 					<div class="modal-image-container">
+ 						<label style="float:left;width:100%;" class="modal-text">Driver's Photo</label>											
+						<input id="driver-image-capture" name="file" type='file' onchange="readURL(this);" style="float:left;"/>
+						<img id="driver-image"  style="float:left; margin:5px;"/>
+						<div class='progress_outer'>
+				            <div id='_progress' class='progress'></div>
+				        </div>
+					</div> 
+			    </div>
+			    <div class="modal-footer">
+			      <input id="submitDriver" type = "submit" value="Continue" class = "standardWhiteButton">
+			    </div>
+			  </div>
+			</form>
+			
+			</div>
+	    	
 			<div id="map">
 			</div>
 			<img id="logo" src="images/logo.png">
