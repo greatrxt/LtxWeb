@@ -34,7 +34,7 @@ function loadDataOnMap(map) {
  * @returns
  */
 function fetchVehicleData(){
-	  var url = "http://localhost:8080/AngelTwo/rest/status/vehicle/100/1000";
+	  var url = "http://localhost:8080/AngelTwo/rest/status/vehicle/100/10000";
 	  var xmlhttp = new XMLHttpRequest();
 
 	  xmlhttp.onreadystatechange = function() {
@@ -199,37 +199,48 @@ function drawSimplePolylineWithRawPoints(response){
   var snappedLatLngArray = new Array();
   vehicleBounds = new google.maps.LatLngBounds();
   for(var l = 0; l < rawPoints.length; l++){
-	  var locationJson = rawPoints[l];	  
-	  var marker;
-	  var image = 'images/almost_transparent.png';
-	  if(locationJson.snappedLatitude > 0 && locationJson.snappedLongitude > 0 && locationJson.mSpeed > min_speed){
-		  latLngArray.push(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));
-		  snappedLatLngArray.push(new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude));
-		  marker=new google.maps.Marker({
-			  position:new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude),
-			  icon:image
-		  });
-	  } else {
-		  marker=new google.maps.Marker({
-			  position:new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude),
-			  icon:image
-		  });
-	  }
-	  vehicleBounds.extend(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));  
+	  var locationJson = rawPoints[l];
+	  if(locationJson.mLatitude > 0 && locationJson.mLongitude > 0){
+		  //var locationJson = rawPoints[l];	  
+		  var marker;
+		  var image = 'images/almost_transparent.png';
+		  if(locationJson.mSpeed > min_speed){
+			  latLngArray.push(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));
+			  if(locationJson.snappedLatitude > 0 && locationJson.snappedLongitude > 0){	  
+				  snappedLatLngArray.push(new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude));
+				  marker=new google.maps.Marker({
+					  position:new google.maps.LatLng(locationJson.snappedLatitude, locationJson.snappedLongitude),
+					  icon:image
+				  });
+			  } else {
+				  marker=new google.maps.Marker({
+					  position:new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude),
+					  icon:image
+				  });
+			  }
 
-	  marker.setMap(map);
-
-	  if(l == 0 || l == rawPoints.length -1){
-		  var prefix;
-		  if(l==0) 
-			  prefix = "Begin - ";
-		  else
-			  prefix = "End - ";
-		  addMarker(marker, prefix + locationJson.mTime, true); //show fixed markers for 1st and last point
-	  } else {
-		  addMarker(marker, locationJson.mTime+"\nSpeed - "+(locationJson.mSpeed * 3.6)+" kmph", false);	//show temp marker for other points
-	  }
+		  } else {
+			  marker=new google.maps.Marker({
+				  position:new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude),
+				  icon:image
+			  });
+		  }
+		  vehicleBounds.extend(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));  
+	
+		  marker.setMap(map);
+	
+		  if(l == 0 || l == rawPoints.length -1){
+			  var prefix;
+			  if(l==0) 
+				  prefix = "Begin - ";
+			  else
+				  prefix = "End - ";
+			  addMarker(marker, prefix + locationJson.mTime, true); //show fixed markers for 1st and last point
+		  } else {
+			  addMarker(marker, locationJson.mTime+"\nSpeed - "+(locationJson.mSpeed * 3.6)+" kmph", false);	//show temp marker for other points
+		  }
 	  
+	  }
   }
   var arrow = {
 	  path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW

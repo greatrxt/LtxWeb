@@ -16,7 +16,7 @@
     display: none; /* Hidden by default */
     position: absolute; /* Stay in place */
     z-index: 100; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding-top: 15%; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -33,7 +33,7 @@
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 50%;
+    width:600px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
@@ -146,15 +146,17 @@
 }
 
 .progress_outer {
-        border: 1px solid #000;
-        float:left;
-        width:100%;
-        margin-top:10px; 
+    border: 1px solid #000;
+    float:left;
+    width:100%;
+    margin-top:10px; 
+    display: none;
 }
 .progress {
     background: #DEDEDE;
     height: 20px; 
     width: 0px;
+    display: none;
 }
 
 #admin-floating-panel {

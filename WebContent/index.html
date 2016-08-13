@@ -9,7 +9,9 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script type="text/javascript" src="js/fsearch.js"></script>
         <script type="text/javascript" src="js/initMap.js"></script>
-        <script type="text/javascript" src="js/modals.js"></script>
+        <script type="text/javascript" src="js/drivermodal.js"></script>
+        <script type="text/javascript" src="js/vehiclemodal.js"></script>
+        <script type="text/javascript" src="js/sidenav.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDQ83TAYpMTZv3AN1dxmcoo0Gp4nRRk2xM&sensor=false"></script>
         <script>
 			$(document).ready(function(){
@@ -53,9 +55,11 @@
 		</script>
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/sidenav.css">
         <link rel="stylesheet" href="css/modal-style.css">
     </head>
     <body>
+    <!-- <iframe width="0" height="0" border="0" name="redirectframe" id="redirectframe"></iframe> -->
 		<div id="wrapper">
 			<div id="floating-panel">
 	      		<input id = "rawDataButton" onclick="toggleRawPoints();" type = button value="Raw Location" class = "standardMutebutton">
@@ -65,19 +69,19 @@
 	    	</div>
 	    	
 	    	<div id="admin-floating-panel">
-	    		<input id="openVehicleModalButton" type = button onclick="openVehicleModal()" value="Add Vehicle" class = "standardAdminbutton">
-	    		<input id="openDriverModalButton" type = button onclick="openDriverModal()" value="Add Driver" class = "standardAdminbutton">
+<!-- 	    		<input id="openVehicleModalButton" type = button onclick="openVehicleModal()" value="Add Vehicle" class = "standardAdminbutton">
+	    		<input id="openDriverModalButton" type = button onclick="openDriverModal()" value="Add Driver" class = "standardAdminbutton"> -->
+	    		<input id="openNavlButton" type = button onclick="openNav()" value="View Drivers and Vehicles" class = "standardAdminbutton">
 	    	</div>
 	    	
 
-			<!-- The Modal -->
+			<!-- The Driver Modal -->
 			<div id="driverModal" class="modal">
 			
-			<form method="post" action="http://localhost:8080/AngelTwo/rest/driver/form" enctype="multipart/form-data">
 						  <!-- Modal content -->
 			  <div class="modal-content">
 			    <div class="modal-header">
-			      <span class="close" onclick="closeVehicleModal()">×</span>
+			      <span class="close" onclick="closeDriverModal()">×</span>
 			      <h2>Add Driver</h2>
 			    </div>
 			    <div class="modal-body">
@@ -110,20 +114,19 @@
  						<label style="float:left;width:100%;" class="modal-text">Driver's Photo</label>											
 						<input id="driver-image-capture" name="file" type='file' onchange="readURL(this);" style="float:left;"/>
 						<img id="driver-image"  style="float:left; margin:5px;"/>
-						<div class='progress_outer'>
+						<div id='_progress_outer' class='progress_outer'>
 				            <div id='_progress' class='progress'></div>
 				        </div>
 					</div> 
 			    </div>
 			    <div class="modal-footer">
-			      <input id="submitDriver" type = "submit" value="Continue" class = "standardWhiteButton">
+			      <input id="submitDriver" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitDriverData();">
 			    </div>
 			  </div>
-			</form>
 			
 			</div>
-	    	
-			<div id="map">
+	    	<div class='notification' style='display:none'></div>
+				<div id="map">
 			</div>
 			<img id="logo" src="images/logo.png">
 			</div>
@@ -132,7 +135,32 @@
 				placeholder="Search for Vehicle, Driver.." title="Search" spellcheck="false" style="outline: none;">
 				<i id="search-button" class="fa fa-search"></i>
 				<div id="divResult">
+				</div>
 			</div>
-		</div>
+			<div id="contentnavcontainer" class = "sidenavcontainer"></div>
+			<div id="contentnav" class="sidenav">
+
+			<div class="tab-row">
+			  <a href="#" onclick="displayVehicles();">
+			    <div id = "vehicles-tab" class="tab-third tablink tab-bottombar tab-hover-light-grey tab-padding">Vehicles</div>
+			  </a>
+			  <!-- <a href="#" onclick="openTab(event, 'Driver');"> -->
+			  <a href="#" onclick="displayDrivers();">
+			    <div id = "drivers-tab" class="tab-third tablink tab-bottombar tab-hover-light-grey tab-padding">Drivers</div>
+			  </a>
+			</div>
+
+			<div id="tab-selected-data">
+			<div id="tab-loading-data">
+			</div>
+			<div id="tab-result">
+			<!-- <ul>
+			<li><img class="profile_image" src="photos/1.jpg" alt="acds"/><span class="name">sfsfsd</span><br/><span class="userdetails">sfsdfs</span></li>
+			<li id='add' class="option"><img class="profile_image" src="photos/1.jpg" alt="acds"/><span class="name">sfsfsd</span><br/><span class="userdetails">sfsdfs</span></li>
+			</ul> -->
+			</div>
+			</div>
+			</div>
+			
     </body>
 </html>
