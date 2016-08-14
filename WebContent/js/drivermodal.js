@@ -63,6 +63,7 @@ function submitDriverData(){
                 if(resp.result === 'success'){
                 	closeDriverModal();
                 	notifyUser('Driver added');
+                	fetchData('driver');
                 } else {
                 	notifyUser(resp.error_message);
                 }
@@ -89,15 +90,15 @@ function submitDriverData(){
 
 var driverImageInBase64;
 
-function readURL(input) {
+function readDriverImageURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
             $('#driver-image')
                 .attr('src', e.target.result)
-                .width(200)
-                .height(200);
+                .width(150)
+                .height(180);
             
             driverImageInBase64 = e.target.result;
         };

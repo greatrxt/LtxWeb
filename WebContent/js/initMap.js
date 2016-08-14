@@ -254,7 +254,7 @@ function drawSimplePolylineWithRawPoints(response){
 		  path:latLngArray,
 		  strokeColor:"#FF0000",
 		  strokeOpacity:0.8,
-		  strokeWeight:3,
+		  strokeWeight:4,
 		  icons: [{
 	            icon: arrow,
 	            repeat:'300px',

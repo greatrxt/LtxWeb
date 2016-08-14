@@ -12,6 +12,7 @@
         <script type="text/javascript" src="js/drivermodal.js"></script>
         <script type="text/javascript" src="js/vehiclemodal.js"></script>
         <script type="text/javascript" src="js/sidenav.js"></script>
+        <script type="text/javascript" src="js/leftnav.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDQ83TAYpMTZv3AN1dxmcoo0Gp4nRRk2xM&sensor=false"></script>
         <script>
 			$(document).ready(function(){
@@ -56,11 +57,37 @@
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/sidenav.css">
+        <link rel="stylesheet" href="css/leftnav.css">
         <link rel="stylesheet" href="css/modal-style.css">
     </head>
     <body>
-    <!-- <iframe width="0" height="0" border="0" name="redirectframe" id="redirectframe"></iframe> -->
+    	<div id="leftnav" class="leftnav">
+    	<a href="javascript:void(0)" class="closebtn" onclick="closeLeftNav()">&times;</a>
+		<div id="nav-loading-data"></div>
+		<div><img id="left-nav-image" class="profile_image" src="images/loading-black.gif" alt="acds"/></div>
+		
+		<div id="driver-data-display">
+				<span>Name </span><input id="driver-display-name" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+							placeholder="Name">
+							
+				<span>Username </span><input id="driver-display-username" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+							placeholder="username">
+							
+				<span>Contact </span><input id="driver-display-contact" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+							placeholder="enter contact number">
+		 </div>
+		 
+		 <div id="vehicle-data-display"></div>
+
+    	</div>
 		<div id="wrapper">
+			<div id="search">
+				<input id="search-text" autocomplete="off" autofocus="" name="search_query" value="" type="text" tabindex="1" 
+				placeholder="Search for Vehicle, Driver.." title="Search" spellcheck="false" style="outline: none;">
+				<i id="search-button" class="fa fa-search"></i>
+				<div id="divResult">
+				</div>
+			</div>
 			<div id="floating-panel">
 	      		<input id = "rawDataButton" onclick="toggleRawPoints();" type = button value="Raw Location" class = "standardMutebutton">
 	      		<input id = "snappedDataButton" onclick="toggleSnappedPoints();" type = button value="Snapped Location" class = "standardMutebutton">
@@ -112,7 +139,7 @@
 					</div>
  					<div class="modal-image-container">
  						<label style="float:left;width:100%;" class="modal-text">Driver's Photo</label>											
-						<input id="driver-image-capture" name="file" type='file' onchange="readURL(this);" style="float:left;"/>
+						<input id="driver-image-capture" name="file" type='file' onchange="readDriverImageURL(this);" style="float:left;"/>
 						<img id="driver-image"  style="float:left; margin:5px;"/>
 						<div id='_progress_outer' class='progress_outer'>
 				            <div id='_progress' class='progress'></div>
@@ -129,13 +156,6 @@
 				<div id="map">
 			</div>
 			<img id="logo" src="images/logo.png">
-			</div>
-			<div id="search">
-				<input id="search-text" autocomplete="off" autofocus="" name="search_query" value="" type="text" tabindex="1" 
-				placeholder="Search for Vehicle, Driver.." title="Search" spellcheck="false" style="outline: none;">
-				<i id="search-button" class="fa fa-search"></i>
-				<div id="divResult">
-				</div>
 			</div>
 			<div id="contentnavcontainer" class = "sidenavcontainer"></div>
 			<div id="contentnav" class="sidenav">
