@@ -59,6 +59,11 @@ function showDriverData(username){
 	fetchAndDisplayDriverData(username); //in leftnav.js
 }
 
+function showVehicleData(uniqueId){
+	closeNav();
+	fetchAndDisplayVehicleData(uniqueId); //in leftnav.js
+}
+
 /**
  * Fetch data from server
  * @param type
@@ -102,7 +107,7 @@ function displayVehiclesData(dataDiv, resp){
     	
     	for(var i = 0; i < vehiclesArray.length; i++){
     		var vehicle = vehiclesArray[i];
-    		str+="<div onclick='showDriver()'><li><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/"+vehicle.uniqueId+".png' alt='"
+    		str+="<div onclick=showVehicleData('"+vehicle.uniqueId+"');><li><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/"+vehicle.uniqueId+".png' alt='"
     				+ vehicle.registrationNumber+"'/>"	+ "<span class='name'>" + vehicle.registrationNumber + "</span><br/><span class='userdetails'>" + " Current Location " + "</span></li></div>"
     	}
         

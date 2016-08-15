@@ -18,12 +18,8 @@ function openVehicleModal() {
 
 function closeVehicleModal(){
 	document.getElementById('vehicleModal').style.display = "none";
-	document.getElementById('vehicle-name').value='';
-	document.getElementById('vehicle-username').value='';
-	document.getElementById('vehicle-password').value='';
-	document.getElementById('vehicle-confirmpassword').value='';
-	document.getElementById('vehicle-contact').value='';
-	document.getElementById('vehicle-doj').value='';
+	document.getElementById('vehicle-registration').value='';
+	document.getElementById('vehicle-uniqueId').value='';
 	document.getElementById('vehicle-image-capture').value='';
 	document.getElementById('vehicle-image').src='';
 	document.getElementById('vehicle-image').style.width=0;
@@ -48,11 +44,8 @@ function submitVehicleData(){
     }*/
 
     var vehicle = new Object();
-    vehicle.name = document.getElementById('vehicle-name').value;
-    vehicle.username = document.getElementById('vehicle-username').value;
-    vehicle.password = document.getElementById('vehicle-password').value;
-    vehicle.contact = document.getElementById('vehicle-contact').value;
-    vehicle.doj = document.getElementById('vehicle-doj').value;
+    vehicle.registration = document.getElementById('vehicle-registration').value;
+    vehicle.uniqueId = document.getElementById('vehicle-uniqueId').value;
     vehicle.image = vehicleImageInBase64;
     
     var request = new XMLHttpRequest();
@@ -63,6 +56,7 @@ function submitVehicleData(){
                 if(resp.result === 'success'){
                 	closeVehicleModal();
                 	notifyUser('Vehicle added');
+                	fetchData('vehicle')
                 } else {
                 	notifyUser(resp.error_message);
                 }
@@ -89,15 +83,15 @@ function submitVehicleData(){
 
 var vehicleImageInBase64;
 
-function readURL(input) {
+function readVehicleImageURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
             $('#vehicle-image')
                 .attr('src', e.target.result)
-                .width(200)
-                .height(200);
+                .width(200);
+                //.height(200);
             
             vehicleImageInBase64 = e.target.result;
         };

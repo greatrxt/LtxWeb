@@ -64,9 +64,10 @@
     	<div id="leftnav" class="leftnav">
     	<a href="javascript:void(0)" class="closebtn" onclick="closeLeftNav()">&times;</a>
 		<div id="nav-loading-data"></div>
-		<div><img id="left-nav-image" class="profile_image" src="images/loading-black.gif" alt="acds"/></div>
 		
 		<div id="driver-data-display">
+				<div><img id="driver-nav-image" class="profile_image" src="images/loading-black.gif" alt="image"/></div>
+				<span class="leftnav-title">Driver Information </span><br>
 				<span>Name </span><input id="driver-display-name" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
 							placeholder="Name">
 							
@@ -77,7 +78,22 @@
 							placeholder="enter contact number">
 		 </div>
 		 
-		 <div id="vehicle-data-display"></div>
+		 <div id="vehicle-data-display">
+		 
+		 <div><img id="vehicle-nav-image" class="profile_image" src="images/loading-black.gif" alt="image"/></div>
+				<span class="leftnav-title">Vehicle Information </span><br>
+				<span>Registration </span><input id="vehicle-display-registration" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+							placeholder="Registration">
+							
+				<span>UniqueId </span><input id="vehicle-display-uniqueId" type="text" tabindex="2" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+							placeholder="uniqueId">
+		 
+		 		<span class="leftnav-title">Trip Data </span><br>
+		 		<span>From </span>
+		 		<input id="vehicle-display-from-date" type="date" tabindex="3">
+		 		<span>To </span>
+				<input id="vehicle-display-to-date" type="date" tabindex="4">
+		 </div>
 
     	</div>
 		<div id="wrapper">
@@ -152,6 +168,43 @@
 			  </div>
 			
 			</div>
+			
+						<!-- The Vehicle Modal -->
+			<div id="vehicleModal" class="modal">
+			
+						  <!-- Modal content -->
+			  <div class="modal-content">
+			    <div class="modal-header">
+			      <span class="close" onclick="closeVehicleModal()">×</span>
+			      <h2>Add Vehicle</h2>
+			    </div>
+			    <div class="modal-body">
+					<div class="modal-form">
+						
+						<input id="vehicle-registration" type="text" tabindex="1" 
+							placeholder="Registration Number" style="outline: none;" class="modal-text">
+						
+					    <input id="vehicle-uniqueId" type="text" tabindex="2" 
+							placeholder="UniqueId" style="outline: none;" class="modal-text">
+						
+						
+					</div>
+ 					<div class="modal-image-container">
+ 						<label style="float:left;width:100%;" class="modal-text">Vehicle's Photo</label>											
+						<input id="vehicle-image-capture" name="file" type='file' onchange="readVehicleImageURL(this);" style="float:left;"/>
+						<img id="vehicle-image"  style="float:left; margin:5px;"/>
+						<div id='_progress_outer' class='progress_outer'>
+				            <div id='_progress' class='progress'></div>
+				        </div>
+					</div> 
+			    </div>
+			    <div class="modal-footer">
+			      <input id="submitVehicle" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitVehicleData();">
+			    </div>
+			  </div>
+			
+			</div>
+			
 	    	<div class='notification' style='display:none'></div>
 				<div id="map">
 			</div>

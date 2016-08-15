@@ -97,8 +97,8 @@ function readDriverImageURL(input) {
         reader.onload = function (e) {
             $('#driver-image')
                 .attr('src', e.target.result)
-                .width(150)
-                .height(180);
+                .width(150);
+                //.height(180);
             
             driverImageInBase64 = e.target.result;
         };
