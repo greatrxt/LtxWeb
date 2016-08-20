@@ -1,6 +1,6 @@
-var showingRawPoints = false;
+var showingRawPoints = true;
 var showingSnappedPoints = false;
-var showingOsrmPath = true;
+var showingOsrmPath = false;
 var showingGooglePath = false;
 var path;
 var snappedPath;
@@ -13,40 +13,115 @@ var googleLatLngArray = new Array();
 var osrmLimit = 90;
 var vehicleBounds;
 const min_speed = 1;
+var timer;
 var osrmRequestCounter, osrmResponseCounter, osrmFinalResponseIndex;
+var markersArray = [];
 /**
  * Loads data from status endpoint
  * @param map
  * @returns
  */
-function loadDataOnMap(map) {
-  //Loading vehicle information - refer http://www.w3schools.com/json/json_http.asp
-  this.map = map;
-  mapBoundingDone = false;
+function loadDataOnMap() {
+  reset();
+  document.getElementById('loading-trip-data').style.visibility = 'visible';
   fetchVehicleData();
-  setInterval(function(){
-	  //fetchVehicleData();
-  }, 20000);
+  refreshAutomaticallyIfTodaysDataShown();
 }
 
+
+function refreshAutomaticallyIfTodaysDataShown(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+     if(dd<10){
+            dd='0'+dd
+        } 
+        if(mm<10){
+            mm='0'+mm
+        } 
+
+    today = yyyy+'-'+mm+'-'+dd;
+    
+    var toDate = document.getElementById('vehicle-display-to-date').value;
+    if(toDate === today){
+    	  timer = setInterval(function(){
+    		  fetchVehicleData();
+    	  }, 5000);
+    }
+}
+
+function reset(){
+	  if(map==null){
+		  map = document.getElementById("map");
+	  } else {
+		  clearOverlays();
+	  }
+	  if(path!=null) {
+		  path.setMap(null);
+		  path=null
+	  }
+	  if(snappedPath!=null) {
+		  snappedPath.setMap(null);
+		  snappedPath=null
+	  }
+	  if(osrmPath!=null) {
+		  osrmPath.setMap(null);
+		  osrmPath=null
+	  }
+	  if(googlePath!=null) {
+		  googlePath.setMap(null);
+		  googlePath=null
+	  }
+	  
+	  if(timer!=null){
+		  clearInterval(timer);
+	  }  
+	  
+	  mapBoundingDone = false;
+	  
+	  showingRawPoints = true; //show raw points by default
+	  showingSnappedPoints = true;
+	  showingOsrmPath = true;
+	  showingGooglePath = true;
+	  
+	  toggleRawPoints();
+	  toggleCalculatedRoute();
+	  toggleGoogleRoute();
+	  toggleSnappedPoints();
+	  document.getElementById('loading-trip-data').style.visibility = 'hidden';
+}
 /**
  * Fetches vehicle data from server
  * @returns
  */
 function fetchVehicleData(){
-	  var url = "http://localhost:8080/AngelTwo/rest/status/vehicle/100/10000";
+	  //var url = "http://localhost:8080/AngelTwo/rest/status/vehicle/100/10000";
+	  var vehicleUniqueId = document.getElementById('vehicle-display-uniqueId').value;
+	  var fromDate = document.getElementById('vehicle-display-from-date').value;
+	  var toDate = document.getElementById('vehicle-display-to-date').value;
+	  
+	  if(fromDate == "" || toDate == ""){
+		  notifyUser("Please Enter Valid Dates");
+		  reset();
+		  return;
+	  }
+	  var url = "http://localhost:8080/AngelTwo/rest/location/vehicle/" + vehicleUniqueId + "/" + fromDate + "/" + toDate;
 	  var xmlhttp = new XMLHttpRequest();
 
 	  xmlhttp.onreadystatechange = function() {
 	      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 	          var response = JSON.parse(xmlhttp.responseText);
 	          //buildPathsWithoutSnapping(response);
-	          if(Object.keys(response.location).length > 0){
+	          if(Object.keys(response.result).length > 0){
 	        	  drawSimplePolylineWithRawPoints(response);
+	        	  document.getElementById('loading-trip-data').style.visibility = 'hidden';
 	        	  //snapLatLngToRoadUsingGoogleRoadsApi(response);
 		          //snapLatLngToRoadUsingOsrmRoadsApi(response);
 	          } else {
-	        	  alert("No data");
+	        	  //alert("No data");
+	        	  notifyUser(" No Data Found Between Dates "+fromDate+" and "+toDate);
+	        	  reset();
 	          }
 	      }
 	  };
@@ -188,13 +263,20 @@ function snapLatLngToRoadUsingOsrmRoadsApi(response) {
   }
 }
 
+function clearOverlays() {
+	  for (var i = 0; i < markersArray.length; i++ ) {
+	    markersArray[i].setMap(null);
+	  }
+	  markersArray.length = 0;
+}
+
 /**
  * Draw polyline using raw coordinates
  * @param response
  * @returns
  */
 function drawSimplePolylineWithRawPoints(response){
-  var rawPoints = response.location;
+  var rawPoints = response.result;
   var latLngArray = new Array();
   var snappedLatLngArray = new Array();
   vehicleBounds = new google.maps.LatLngBounds();
@@ -228,7 +310,7 @@ function drawSimplePolylineWithRawPoints(response){
 		  vehicleBounds.extend(new google.maps.LatLng(locationJson.mLatitude, locationJson.mLongitude));  
 	
 		  marker.setMap(map);
-	
+		  markersArray.push(marker);
 		  if(l == 0 || l == rawPoints.length -1){
 			  var prefix;
 			  if(l==0) 
@@ -252,12 +334,12 @@ function drawSimplePolylineWithRawPoints(response){
 	  }
 	  path = new google.maps.Polyline({
 		  path:latLngArray,
-		  strokeColor:"#FF0000",
+		  strokeColor:"#1fbad6",
 		  strokeOpacity:0.8,
-		  strokeWeight:4,
+		  strokeWeight:5,
 		  icons: [{
 	            icon: arrow,
-	            repeat:'300px',
+	            repeat:'500px',
 	            offset: '100%'}]
 		  });
 	  
@@ -454,16 +536,19 @@ function addMarker(marker, time, fixed){
  */
 function toggleRawPoints(){
 	var rawDataButton = document.getElementById("rawDataButton");
-	  if(showingRawPoints){
-		  path.setMap(null);
-		  //rawDataButton.value = "Show Raw Data";
-		  rawDataButton.className = "standardNegativebutton";
-	  } else {
-		  path.setMap(map);
-		  //rawDataButton.value = "Hide Raw Data";
-		  rawDataButton.className = "standardbutton";
-	  }
-	  showingRawPoints = !showingRawPoints;
+	if(path!=null){
+		  if(showingRawPoints){
+			  path.setMap(null);
+			  //rawDataButton.value = "Show Raw Data";
+			  rawDataButton.className = "standardNegativebutton";
+		  } else {
+			  path.setMap(map);
+			  rawDataButton.className = "standardbutton";
+		  }
+		  showingRawPoints = !showingRawPoints;
+	} else {
+		rawDataButton.className = "standardMutebutton";
+	}
 }
 
 /**
@@ -472,6 +557,7 @@ function toggleRawPoints(){
  */
 function toggleSnappedPoints(){
 	var snappedDataButton = document.getElementById("snappedDataButton");
+	if(snappedPath!=null){
 	  if(showingSnappedPoints){
 		  snappedPath.setMap(null);
 		  //snappedDataButton.value = "Show Snapped Data";
@@ -482,6 +568,9 @@ function toggleSnappedPoints(){
 		  snappedDataButton.className = "standardbutton";
 	  }
 	  showingSnappedPoints = !showingSnappedPoints;
+	} else {
+		snappedDataButton.className = "standardMutebutton";
+	}
 }
 	
 /**
@@ -489,8 +578,8 @@ function toggleSnappedPoints(){
  * @returns
  */	
 function toggleGoogleRoute(){
+	var googleRouteButton = document.getElementById("googleRouteButton");
 	if(googlePath!=null){
-		var googleRouteButton = document.getElementById("googleRouteButton");
 		googleRouteButton.value = "Google Route";
 		  if(showingGooglePath){
 			  googlePath.setMap(null);
@@ -502,6 +591,8 @@ function toggleGoogleRoute(){
 			  googleRouteButton.className = "standardbutton";
 		  }
 		  showingGooglePath = !showingGooglePath;
+	} else {
+		googleRouteButton.className = "standardMutebutton";
 	}
 }
 
@@ -510,8 +601,8 @@ function toggleGoogleRoute(){
  * @returns
  */
 function toggleCalculatedRoute(){
+	var calculatedRouteButton = document.getElementById("calculatedRouteButton");
 	if(osrmPath!=null){
-		var calculatedRouteButton = document.getElementById("calculatedRouteButton");
 		calculatedRouteButton.value = "Calculated Route";
 		  if(showingOsrmPath){
 			  osrmPath.setMap(null);
@@ -523,5 +614,7 @@ function toggleCalculatedRoute(){
 			  calculatedRouteButton.className = "standardbutton";
 		  }
 		  showingOsrmPath = !showingOsrmPath;
+	} else {
+		calculatedRouteButton.className = "standardMutebutton";
 	}
 }

@@ -17,16 +17,15 @@ function openVehicleModal() {
 }
 
 function closeVehicleModal(){
-	document.getElementById('vehicleModal').style.display = "none";
+	document.getElementById('vehicleModal').style.display = 'none';
 	document.getElementById('vehicle-registration').value='';
 	document.getElementById('vehicle-uniqueId').value='';
 	document.getElementById('vehicle-image-capture').value='';
 	document.getElementById('vehicle-image').src='';
-	document.getElementById('vehicle-image').style.width=0;
-	document.getElementById('vehicle-image').style.height=0;
 	document.getElementById('_progress_outer').style.display='none';
 	document.getElementById('_progress').style.display='none';
 }
+
 
 //Upload image to server
 //http://stackoverflow.com/questions/25204621/send-image-to-server-using-file-input-type
@@ -76,7 +75,7 @@ function submitVehicleData(){
         _progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
     }, false);
 
-    request.open ("POST", "http://localhost:8080/AngelTwo/rest/vehicle/form", true);
+    request.open ("POST", "http://localhost:8080/AngelTwo/rest/vehicle/", true);
     request.setRequestHeader("accept", "application/json");
     request.send(JSON.stringify(vehicle));
 }
@@ -89,9 +88,7 @@ function readVehicleImageURL(input) {
 
         reader.onload = function (e) {
             $('#vehicle-image')
-                .attr('src', e.target.result)
-                .width(200);
-                //.height(200);
+                .attr('src', e.target.result);
             
             vehicleImageInBase64 = e.target.result;
         };

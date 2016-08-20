@@ -21,8 +21,19 @@
     transition: 0.3s
 }
 
+.leftnav i:HOVER {
+	background-color: #333;
+}
+
+.leftnav i {
+	color: #818181;
+	margin-left:1px;
+	padding: 12px;	
+	font-size: 28px;
+}
+
 .leftnav .leftnav-title {
-	width:100%; 
+	width:80%; 
 	margin:20px; 
 	font-weight: bold;
 	font-size: 23px;
@@ -48,6 +59,7 @@
     width:120px;
     float:left;
     margin-top: 7px;
+    margin-right: 10px;
 }
 
 .leftnav input {
@@ -58,6 +70,21 @@
     background-color: #111;
     border:none;
     margin-top: 7px;
+}
+
+.leftnav .standardbutton {
+	background-color: #4CAF50;
+	margin: 20px;
+	color: #EEEEEE;
+	width: 90%;
+}
+
+.leftnav span:HOVER {
+	color: #4285f4;
+}
+
+.leftnav .standardbutton:HOVER {
+	background-color: #4285f4;
 }
 
 #nav-loading-data {

@@ -5,6 +5,7 @@ html, body, #map, #wrapper {
     padding: 0;
 	top: 0px;
 	z-index: 1;
+	font-family: helvetica, arial, sans-serif;
 }
 
 .notification {
@@ -43,6 +44,7 @@ html, body, #map, #wrapper {
 	font-family: helvetica, arial, sans-serif;
 }
 
+
 .standardAdminbutton {
 	background-color: #4285f4; /* Blue */
     border: none;
@@ -56,7 +58,6 @@ html, body, #map, #wrapper {
     font-weight:bold;
 	font-family: helvetica, arial, sans-serif;
 }
-
 
 .standardNegativebutton {
 	background-color: #e32636; /* Red */

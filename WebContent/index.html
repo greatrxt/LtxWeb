@@ -11,6 +11,7 @@
         <script type="text/javascript" src="js/initMap.js"></script>
         <script type="text/javascript" src="js/drivermodal.js"></script>
         <script type="text/javascript" src="js/vehiclemodal.js"></script>
+        <script type="text/javascript" src="js/editVehicleModal.js"></script>
         <script type="text/javascript" src="js/sidenav.js"></script>
         <script type="text/javascript" src="js/leftnav.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDQ83TAYpMTZv3AN1dxmcoo0Gp4nRRk2xM&sensor=false"></script>
@@ -48,7 +49,7 @@
 			        maxZoom: 18
 			    }));
 			    
-			    loadDataOnMap(map);
+			    //loadDataOnMap(map);
 				$('#search-text').fsearch();
 				
 
@@ -67,32 +68,34 @@
 		
 		<div id="driver-data-display">
 				<div><img id="driver-nav-image" class="profile_image" src="images/loading-black.gif" alt="image"/></div>
-				<span class="leftnav-title">Driver Information </span><br>
-				<span>Name </span><input id="driver-display-name" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+				<span class="leftnav-title">Driver Information <i id="editDriver" class="fa fa-pencil" onclick="editDriverData();"></i><i id="deleteDriver" class="fa fa-trash" onclick="deleteDriver();"></i></span><br>
+				<span>Name </span><input id="driver-display-name" type="text" tabindex="1" readonly
 							placeholder="Name">
 							
-				<span>Username </span><input id="driver-display-username" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+				<span>Username </span><input id="driver-display-username" type="text" tabindex="1" readonly
 							placeholder="username">
 							
-				<span>Contact </span><input id="driver-display-contact" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+				<span>Contact </span><input id="driver-display-contact" type="text" tabindex="1" readonly
 							placeholder="enter contact number">
 		 </div>
 		 
 		 <div id="vehicle-data-display">
 		 
 		 <div><img id="vehicle-nav-image" class="profile_image" src="images/loading-black.gif" alt="image"/></div>
-				<span class="leftnav-title">Vehicle Information </span><br>
-				<span>Registration </span><input id="vehicle-display-registration" type="text" tabindex="1" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+				<span class="leftnav-title">Vehicle Information <i id="editVehicle" class="fa fa-pencil" onclick="editVehicleData();"></i><i id="deleteVehicle" class="fa fa-trash" onclick="deleteVehicle();"></i></span><br>
+				<span>Registration </span><input id="vehicle-display-registration" type="text" tabindex="1" readonly
 							placeholder="Registration">
 							
-				<span>UniqueId </span><input id="vehicle-display-uniqueId" type="text" tabindex="2" onfocus="(this.style.backgroundColor='white')" onfocusout="(this.style.backgroundColor='#111')" 
+				<span>UniqueId </span><input id="vehicle-display-uniqueId" type="text" tabindex="2" readonly
 							placeholder="uniqueId">
 		 
 		 		<span class="leftnav-title">Trip Data </span><br>
 		 		<span>From </span>
-		 		<input id="vehicle-display-from-date" type="date" tabindex="3">
+		 		<input id="vehicle-display-from-date" type="date" tabindex="3" onfocusout="setMinToDate();">
 		 		<span>To </span>
-				<input id="vehicle-display-to-date" type="date" tabindex="4">
+				<input id="vehicle-display-to-date" type="date" tabindex="4" onfocusout="setMaxFromDate();">
+				<input id="fetchVehicleData" value = "Get Trip Data" type="button" class="standardbutton" tabindex="5" onclick="loadDataOnMap();">
+				<i id="loading-trip-data" class="fa fa-refresh fa-spin" style="font-size:60px;color:#818181;margin-left:42%;visibility: hidden;"></i>
 		 </div>
 
     	</div>
@@ -105,7 +108,7 @@
 				</div>
 			</div>
 			<div id="floating-panel">
-	      		<input id = "rawDataButton" onclick="toggleRawPoints();" type = button value="Raw Location" class = "standardMutebutton">
+	      		<input id = "rawDataButton" onclick="toggleRawPoints();" type = button value="Show/Hide Trip" class = "standardMutebutton">
 	      		<input id = "snappedDataButton" onclick="toggleSnappedPoints();" type = button value="Snapped Location" class = "standardMutebutton">
 	      		<input id = "calculatedRouteButton" onclick="toggleCalculatedRoute();" type = button value="Processing Calculated Route" class = "standardMutebutton">
 	      		<input id = "googleRouteButton" onclick="toggleGoogleRoute();" type = button value="Processing Google Route" class = "standardMutebutton">
@@ -129,34 +132,36 @@
 			    </div>
 			    <div class="modal-body">
 					<div class="modal-form">
+					<span>Name</span>
 						<input id="driver-name" type="text" tabindex="1" 
-							placeholder="Name" style="outline: none;" class="modal-text">
+							placeholder="Driver's Name" style="outline: none;" class="modal-text">
 						
-	
+						<span>Username</span>
 					    <input id="driver-username" type="text" tabindex="1" 
-							placeholder="Username" style="outline: none;" class="modal-text">
+							placeholder="Please enter a unique username" style="outline: none;" class="modal-text">
 						
-						
+						<span>Password</span>
 						<input id="driver-password" type="password" tabindex="1" 
-							placeholder="Password" style="outline: none;" class="modal-text">
+							placeholder="Enter password here" style="outline: none;" class="modal-text">
 						
-						
+						<span>Confirm Password</span>
 						<input id="driver-confirmpassword" type="password" tabindex="1" 
-							placeholder="Confirm Password" style="outline: none;" class="modal-text">
+							placeholder="Enter password again" style="outline: none;" class="modal-text">
 						
-						
+						<span>Contact Number</span>
 						<input id="driver-contact" type="text" tabindex="1" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-							placeholder="Contact Number" style="outline: none;" class="modal-text">
+							placeholder="Driver's contact number" style="outline: none;" class="modal-text">
 						
+						<span>Date Of Joining</span>
 						<!-- http://stackoverflow.com/questions/25018653/remove-placeholder-from-date-type-input-in-chrome -->
 						<input id="driver-doj" type="text" tabindex="1" onfocus="(this.type='date')" onfocusout="(this.type='text')" 
-							placeholder="Date Of Joining" style="outline: none;" class="modal-text">
+							placeholder="Date of joining the organization" style="outline: none;" class="modal-text">
 						
 					</div>
  					<div class="modal-image-container">
- 						<label style="float:left;width:100%;" class="modal-text">Driver's Photo</label>											
+ 						<span>Image </span>										
 						<input id="driver-image-capture" name="file" type='file' onchange="readDriverImageURL(this);" style="float:left;"/>
-						<img id="driver-image"  style="float:left; margin:5px;"/>
+						<img id="driver-image"  style="float:left; margin:5px;max-width: 200px;"/>
 						<div id='_progress_outer' class='progress_outer'>
 				            <div id='_progress' class='progress'></div>
 				        </div>
@@ -180,19 +185,19 @@
 			    </div>
 			    <div class="modal-body">
 					<div class="modal-form">
-						
+						<span>Registration </span>
 						<input id="vehicle-registration" type="text" tabindex="1" 
-							placeholder="Registration Number" style="outline: none;" class="modal-text">
-						
+							placeholder="Registration Number of Vehicle" style="outline: none;" class="modal-text">
+						<span>Unique ID </span>
 					    <input id="vehicle-uniqueId" type="text" tabindex="2" 
-							placeholder="UniqueId" style="outline: none;" class="modal-text">
+							placeholder="Check mobile app for unique ID" style="outline: none;" class="modal-text">
 						
 						
 					</div>
  					<div class="modal-image-container">
- 						<label style="float:left;width:100%;" class="modal-text">Vehicle's Photo</label>											
-						<input id="vehicle-image-capture" name="file" type='file' onchange="readVehicleImageURL(this);" style="float:left;"/>
-						<img id="vehicle-image"  style="float:left; margin:5px;"/>
+ 						<span>Image </span>								
+						<input id="vehicle-image-capture" name="file" type='file' onchange="readVehicleImageURL(this);"/>
+						<img id="vehicle-image"  style="margin:5px;max-width: 200px;"/>
 						<div id='_progress_outer' class='progress_outer'>
 				            <div id='_progress' class='progress'></div>
 				        </div>
@@ -200,6 +205,42 @@
 			    </div>
 			    <div class="modal-footer">
 			      <input id="submitVehicle" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitVehicleData();">
+			    </div>
+			  </div>
+			
+			</div>
+			
+						<!-- Edit Vehicle Modal -->
+			<div id="editVehicleModal" class="modal">
+			
+						  <!-- Modal content -->
+			  <div class="modal-content">
+			    <div class="modal-header">
+			      <span class="close" onclick="closeEditVehicleModal()">×</span>
+			      <h2>Edit Vehicle</h2>
+			    </div>
+			    <div class="modal-body">
+					<div class="modal-form">
+						<span>Registration </span>
+						<input id="edit-vehicle-registration" type="text" tabindex="1" 
+							placeholder="Registration Number" style="outline: none;" class="modal-text">
+						<span>Unique ID </span><!-- Unique ID cannot be edited. User will have to create new Vehicle -->
+					    <input id="edit-vehicle-uniqueId" type="label" tabindex="2" readonly 
+							placeholder="UniqueId" style="outline: none;" class="modal-text">
+						
+						
+					</div>
+ 					<div class="modal-image-container">
+ 						<span>Image </span>												
+						<input id="edit-vehicle-image-capture" name="file" type='file' onchange="readNewVehicleImageURL(this);" style="float:left;"/>
+						<img id="edit-vehicle-image"  style="float:left; margin:5px;max-width: 200px;"/>
+						<div id='_progress_outer' class='progress_outer'>
+				            <div id='_progress' class='progress'></div>
+				        </div>
+					</div> 
+			    </div>
+			    <div class="modal-footer">
+			      <input id="submitEditedVehicle" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitEditedVehicleData();">
 			    </div>
 			  </div>
 			

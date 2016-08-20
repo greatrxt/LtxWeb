@@ -101,9 +101,11 @@ function fetchData(type){
 }
 
 function displayVehiclesData(dataDiv, resp){
-	var str = "<ul><div onclick='openVehicleModal();'><li style='padding-top:30px'><span class='name'>Add New Vehicle</span></li></div>";
+	var str = "<ul><div onclick='openVehicleModal();'><li style='padding-top:30px; height:50px;'><span class='name'>Add New Vehicle</span></li></div>";
 	if(resp.result != 'error'){
     	var vehiclesArray = resp.result;
+    	
+    	str+="<li style='padding-top:30px; height:60px;'><span class='name' style='color:#4CAF50'>"+vehiclesArray.length+" vehicles found</span></li></ul><ul style='height:600px;'>";
     	
     	for(var i = 0; i < vehiclesArray.length; i++){
     		var vehicle = vehiclesArray[i];
@@ -135,7 +137,7 @@ function displayDriversData(dataDiv, resp){
     	str+="</ul>";
     	dataDiv.innerHTML=str;
     	} else {
-    		str+="<li style='padding-top:30px'><span class='name'>"+resp.error_message+"</span></li></ul>";
+    		str+="<li style='padding-top:30px'><span class='name'  style='color:#f44336'>"+resp.error_message+"</span></li></ul>";
     		dataDiv.innerHTML = str;
     	}
 }

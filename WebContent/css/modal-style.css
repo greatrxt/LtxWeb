@@ -26,6 +26,11 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+.modal input[type='file'] {	
+  color: transparent;	/** hide 'No file chosen' */
+  margin: 10px;
+}
+
 /* Modal Content */
 .modal-content {
     position: relative;
@@ -79,6 +84,14 @@
 	display:inline-block;
 }
 
+.modal-body span {
+	font-weight:bold;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+	color:#666666;
+	margin-top: 5px;
+}
+
 .modal-footer {
     padding: 12px 16px;
     background-color: #5cb85c;
@@ -90,16 +103,21 @@
 	width:90%;
 	height:20px;
 	background-color: white;
-	padding: 7px;
-	border:none;
+	margin-top:5px;
+	margin-left:10px;
+	padding:3px;
+	margin-bottom:13px;
+	border-top:none;
+	border-left:none;
+	border-right:none;
 	font-size: 16px;
 }
 
-.modal-form{
+.modal-form {
 	width:60%;
 	float:left;
 }
-.modal-image-container{
+.modal-image-container {
 	width:40%;
 	float:left;
 }

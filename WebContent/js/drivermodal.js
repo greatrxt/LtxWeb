@@ -26,11 +26,10 @@ function closeDriverModal(){
 	document.getElementById('driver-doj').value='';
 	document.getElementById('driver-image-capture').value='';
 	document.getElementById('driver-image').src='';
-	document.getElementById('driver-image').style.width=0;
-	document.getElementById('driver-image').style.height=0;
 	document.getElementById('_progress_outer').style.display='none';
 	document.getElementById('_progress').style.display='none';
 }
+
 
 //Upload image to server
 //http://stackoverflow.com/questions/25204621/send-image-to-server-using-file-input-type
@@ -96,9 +95,7 @@ function readDriverImageURL(input) {
 
         reader.onload = function (e) {
             $('#driver-image')
-                .attr('src', e.target.result)
-                .width(150);
-                //.height(180);
+                .attr('src', e.target.result);
             
             driverImageInBase64 = e.target.result;
         };
