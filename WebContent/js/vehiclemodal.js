@@ -8,12 +8,18 @@ $(document).ready(function(){
 	}
 })
 
+var vehicleImageInBase64;
+
+
 function notifyUser(message){
 	$('.notification').text(message).fadeIn(400).delay(3000).fadeOut(400);
 }
 
 function openVehicleModal() {
 	document.getElementById('vehicleModal').style.display = "block";
+    document.getElementById('clearVehicleImageButton').style.display='none';
+    document.getElementById('vehicle-image-capture').style.display='block';
+    document.getElementById('vehicle-data-submit-progress').style.visibility = 'hidden';
 }
 
 function closeVehicleModal(){
@@ -27,13 +33,8 @@ function closeVehicleModal(){
 }
 
 
-//Upload image to server
-//http://stackoverflow.com/questions/25204621/send-image-to-server-using-file-input-type
-//http://codular.com/javascript-ajax-file-upload-with-progress
-
-
 function submitVehicleData(){
-
+	document.getElementById('vehicle-edit-data-submit-progress').style.visibility = 'visible';
 	var _submit = document.getElementById('submitVehicle'), 
 	_file = document.getElementById('vehicle-image-capture'), 
 	_progress = document.getElementById('_progress');
@@ -61,11 +62,11 @@ function submitVehicleData(){
                 }
             } catch (e){
                 var resp = {
-                    status: 'error',
-                    data: 'Unknown error occurred: [' + request.responseText + ']'
-                };
+                        status: 'error',
+                        data: e.message
+                    };
+                notifyUser(resp.status + ': ' + resp.data);
             }
-            console.log(resp.status + ': ' + resp.data);
         }
     };
 
@@ -80,7 +81,15 @@ function submitVehicleData(){
     request.send(JSON.stringify(vehicle));
 }
 
-var vehicleImageInBase64;
+
+function clearVehicleImage(){
+    $('#vehicle-image')
+    .attr('src', '');
+	document.getElementById('vehicle-image-capture').value='';
+	vehicleImageInBase64 = '';
+    document.getElementById('clearVehicleImageButton').style.display='none';
+    document.getElementById('vehicle-image-capture').style.display='block';
+}
 
 function readVehicleImageURL(input) {
     if (input.files && input.files[0]) {
@@ -91,6 +100,8 @@ function readVehicleImageURL(input) {
                 .attr('src', e.target.result);
             
             vehicleImageInBase64 = e.target.result;
+            document.getElementById('clearVehicleImageButton').style.display='block';
+            document.getElementById('vehicle-image-capture').style.display='none';
         };
 
         reader.readAsDataURL(input.files[0]);

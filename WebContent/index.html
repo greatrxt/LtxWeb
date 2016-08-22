@@ -8,53 +8,15 @@
         <link rel="icon" href="images/favicon.ico" type="image/gif" sizes="16x16">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script type="text/javascript" src="js/fsearch.js"></script>
+        <script type="text/javascript" src="js/tripData.js"></script>
         <script type="text/javascript" src="js/initMap.js"></script>
         <script type="text/javascript" src="js/drivermodal.js"></script>
         <script type="text/javascript" src="js/vehiclemodal.js"></script>
         <script type="text/javascript" src="js/editVehicleModal.js"></script>
+        <script type="text/javascript" src="js/deleteVehicleModal.js"></script>
         <script type="text/javascript" src="js/sidenav.js"></script>
         <script type="text/javascript" src="js/leftnav.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDQ83TAYpMTZv3AN1dxmcoo0Gp4nRRk2xM&sensor=false"></script>
-        <script>
-			$(document).ready(function(){
-			    var element = document.getElementById("map");
-
-			    /*
-			    Build list of map types.
-			    You can also use var mapTypeIds = ["roadmap", "satellite", "hybrid", "terrain", "OSM"]
-			    but static lists sucks when google updates the default list of map types.
-			    */
-			    var mapTypeIds = [];
-			    for(var type in google.maps.MapTypeId) {
-			        mapTypeIds.push(google.maps.MapTypeId[type]);
-			    }
-			    mapTypeIds.push("OSM");
-
-			    map = new google.maps.Map(element, {
-			        center: new google.maps.LatLng(19, 73),
-			        zoom: 10,
-			        mapTypeId: "OSM",
-			        mapTypeControlOptions: {
-			            mapTypeIds: mapTypeIds
-			        }
-			    });
-
-			    map.mapTypes.set("OSM", new google.maps.ImageMapType({
-			        getTileUrl: function(coord, zoom) {
-			            // See above example if you need smooth wrapping at 180th meridian
-			            return "http://tile.openstreetmap.org/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-			        },
-			        tileSize: new google.maps.Size(256, 256),
-			        name: "OpenStreetMap",
-			        maxZoom: 18
-			    }));
-			    
-			    //loadDataOnMap(map);
-				$('#search-text').fsearch();
-				
-
-			});
-		</script>
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/sidenav.css">
@@ -62,6 +24,7 @@
         <link rel="stylesheet" href="css/modal-style.css">
     </head>
     <body>
+    <img id="vehicle_icon_holder" src="images/vehicle-icon.png" style="display: none;"/><!-- do NOT delete. Used for showing CAR marker rotation -->
     	<div id="leftnav" class="leftnav">
     	<a href="javascript:void(0)" class="closebtn" onclick="closeLeftNav()">&times;</a>
 		<div id="nav-loading-data"></div>
@@ -82,7 +45,7 @@
 		 <div id="vehicle-data-display">
 		 
 		 <div><img id="vehicle-nav-image" class="profile_image" src="images/loading-black.gif" alt="image"/></div>
-				<span class="leftnav-title">Vehicle Information <i id="editVehicle" class="fa fa-pencil" onclick="editVehicleData();"></i><i id="deleteVehicle" class="fa fa-trash" onclick="deleteVehicle();"></i></span><br>
+				<span class="leftnav-title">Vehicle Information <i id="editVehicle" class="fa fa-pencil" onclick="editVehicleData();"></i><i id="deleteVehicle" class="fa fa-trash" onclick="openDeleteVehicleModal();"></i></span><br>
 				<span>Registration </span><input id="vehicle-display-registration" type="text" tabindex="1" readonly
 							placeholder="Registration">
 							
@@ -169,6 +132,8 @@
 			    </div>
 			    <div class="modal-footer">
 			      <input id="submitDriver" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitDriverData();">
+			      <input type = "button" value = " Cancel " class = "standardWhiteButton" onclick="closeDriverModal();">
+			      <i id="driver-data-submit-progress" class="fa fa-refresh fa-spin" style="font-size:30px;color:#EEEEEE;margin-left:3%;"></i>
 			    </div>
 			  </div>
 			
@@ -195,9 +160,11 @@
 						
 					</div>
  					<div class="modal-image-container">
- 						<span>Image </span>								
-						<input id="vehicle-image-capture" name="file" type='file' onchange="readVehicleImageURL(this);"/>
-						<img id="vehicle-image"  style="margin:5px;max-width: 200px;"/>
+ 						<span>Image </span><span id="clearVehicleImageButton" class="close" onclick="clearVehicleImage()">×</span>						
+						<div>
+							<input id="vehicle-image-capture" name="file" type='file' onchange="readVehicleImageURL(this);"/>
+							<img id="vehicle-image"  style="margin:5px;max-width: 200px;"/>
+						</div>
 						<div id='_progress_outer' class='progress_outer'>
 				            <div id='_progress' class='progress'></div>
 				        </div>
@@ -205,6 +172,8 @@
 			    </div>
 			    <div class="modal-footer">
 			      <input id="submitVehicle" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitVehicleData();">
+			      <input type = "button" value = " Cancel " class = "standardWhiteButton" onclick="closeVehicleModal();">
+			      <i id="vehicle-data-submit-progress" class="fa fa-refresh fa-spin" style="font-size:30px;color:#EEEEEE;margin-left:3%;"></i>
 			    </div>
 			  </div>
 			
@@ -231,9 +200,11 @@
 						
 					</div>
  					<div class="modal-image-container">
- 						<span>Image </span>												
-						<input id="edit-vehicle-image-capture" name="file" type='file' onchange="readNewVehicleImageURL(this);" style="float:left;"/>
-						<img id="edit-vehicle-image"  style="float:left; margin:5px;max-width: 200px;"/>
+ 						<span>Image </span><span id="clearEditVehicleImageButton" class="close" onclick="clearEditVehicleImage()">×</span>		
+						<div>
+							<input id="edit-vehicle-image-capture" name="file" type='file' onchange="readNewVehicleImageURL(this);" style="float:left;"/>
+							<img id="edit-vehicle-image"  style="float:left; margin:5px;max-width: 200px;"/>
+						</div>
 						<div id='_progress_outer' class='progress_outer'>
 				            <div id='_progress' class='progress'></div>
 				        </div>
@@ -241,6 +212,31 @@
 			    </div>
 			    <div class="modal-footer">
 			      <input id="submitEditedVehicle" type = "submit" value="Continue" class = "standardWhiteButton" onclick="submitEditedVehicleData();">
+			      <input type = "button" value = " Cancel " class = "standardWhiteButton" onclick="closeEditVehicleModal();">
+			      <i id="vehicle-edit-data-submit-progress" class="fa fa-refresh fa-spin" style="font-size:30px;color:#EEEEEE;margin-left:3%;"></i>
+			    </div>
+			  </div>
+			
+			</div>
+			
+			<!-- The Delete Vehicle Modal -->
+			<div id="deleteVehicleModal" class="modal">
+			
+			<!-- Modal content -->
+			  <div class="modal-content">
+			    <div class="modal-header">
+			      <span class="close" onclick="closeDeleteVehicleModal()">×</span>
+			      <h2>Delete Vehicle</h2>
+			    </div>
+			    <div class="modal-body">
+
+						<span id = "confrmDeleteText">Are you sure you want to delete this Vehicle ? </span>						
+
+			    </div>
+			    <div class="modal-footer">
+			      <input type = "button" value=" Yes " class = "standardWhiteButton" onclick="deleteVehicleData();">
+			      <input type = "button" value = "Cancel" class = "standardWhiteButton" onclick="closeDeleteVehicleModal();">
+			      <i id="vehicle-data-delete-progress" class="fa fa-refresh fa-spin" style="font-size:30px;color:#EEEEEE;margin-left:3%;"></i>
 			    </div>
 			  </div>
 			

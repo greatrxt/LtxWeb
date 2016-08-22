@@ -18,17 +18,19 @@ function editVehicleData(){
                 	document.getElementById('edit-vehicle-registration').value = vehicle.registrationNumber;
                 	document.getElementById('edit-vehicle-uniqueId').value = vehicle.uniqueId;
                 	document.getElementById('edit-vehicle-image').src = 'http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/' + vehicle.uniqueId+'.png';
+                    document.getElementById('clearEditVehicleImageButton').style.display='block';
+                    document.getElementById('edit-vehicle-image-capture').style.display='none';
                 	openEditVehicleModal();
                 } else {
                 	notifyUser(resp.error_message);
                 }
             } catch (e){
                 var resp = {
-                    status: 'error',
-                    data: 'Unknown error occurred: [' + request.responseText + ']'
-                };
+                        status: 'error',
+                        data: e.message
+                    };
+                notifyUser(resp.status + ': ' + resp.data);
             }
-            console.log(resp.status + ': ' + resp.data);
         }
     };
 
@@ -44,6 +46,8 @@ function editVehicleData(){
 function submitEditedVehicleData(){
 	var newRegistrationNumber = document.getElementById('edit-vehicle-registration').value;
 	var uniqueId = document.getElementById('edit-vehicle-uniqueId').value;
+	
+	document.getElementById('vehicle-edit-data-submit-progress').style.visibility = 'visible';
 	
 	var _submit = document.getElementById('submitVehicle'), 
 	_file = document.getElementById('vehicle-image-capture'), 
@@ -70,10 +74,10 @@ function submitEditedVehicleData(){
             } catch (e){
                 var resp = {
                     status: 'error',
-                    data: 'Unknown error occurred: [' + request.responseText + ']'
+                    data: e.message
                 };
+                notifyUser(resp.status + ': ' + resp.data);
             }
-            console.log(resp.status + ': ' + resp.data);
             closeEditVehicleModal();
         }
     };
@@ -91,6 +95,7 @@ function submitEditedVehicleData(){
 
 function openEditVehicleModal() {
 	document.getElementById('editVehicleModal').style.display = "block";
+	document.getElementById('vehicle-edit-data-submit-progress').style.visibility = 'hidden';
 }
 
 function closeEditVehicleModal(){
@@ -106,8 +111,10 @@ function closeEditVehicleModal(){
 function clearEditVehicleImage(){
     $('#edit-vehicle-image')
     .attr('src', '');
-
+	document.getElementById('edit-vehicle-image-capture').value='';
     image = '0';
+    document.getElementById('clearEditVehicleImageButton').style.display='none';
+    document.getElementById('edit-vehicle-image-capture').style.display='block';
 }
 
 function readNewVehicleImageURL(input) {
@@ -119,6 +126,8 @@ function readNewVehicleImageURL(input) {
                 .attr('src', e.target.result);
             
             image = e.target.result;
+            document.getElementById('clearEditVehicleImageButton').style.display='block';
+            document.getElementById('edit-vehicle-image-capture').style.display='none';
         };
 
         reader.readAsDataURL(input.files[0]);

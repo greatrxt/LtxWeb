@@ -86,12 +86,13 @@ function fetchData(type){
                 	displayVehiclesData(dataDiv, resp);
                 }
                 } catch (e){
-                var resp = {
-                    status: 'error',
-                    data: 'Unknown error occurred: [' + request.responseText + ']'
-                };
+	                var resp = {
+	                    status: 'error',
+	                    data: e.message
+	                };
+	                notifyUser(resp.status + ': ' + resp.data);
             }
-            console.log(resp.status + ': ' + resp.data);
+            
         }
     };
 

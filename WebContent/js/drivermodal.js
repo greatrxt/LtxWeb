@@ -14,6 +14,7 @@ function notifyUser(message){
 
 function openDriverModal() {
 	document.getElementById('driverModal').style.display = "block";
+	document.getElementById('driver-data-submit-progress').style.visibility = 'hidden';
 }
 
 function closeDriverModal(){
@@ -37,7 +38,7 @@ function closeDriverModal(){
 
 
 function submitDriverData(){
-
+	document.getElementById('driver-data-submit-progress').style.visibility = 'hidden';
 	var _submit = document.getElementById('submitDriver'), 
 	_file = document.getElementById('driver-image-capture'), 
 	_progress = document.getElementById('_progress');
@@ -68,11 +69,11 @@ function submitDriverData(){
                 }
             } catch (e){
                 var resp = {
-                    status: 'error',
-                    data: 'Unknown error occurred: [' + request.responseText + ']'
-                };
-            }
-            console.log(resp.status + ': ' + resp.data);
+                        status: 'error',
+                        data: e.message
+                    };
+                }
+                notifyUser(resp.status + ': ' + resp.data);
         }
     };
 
