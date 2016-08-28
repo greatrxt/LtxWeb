@@ -31,23 +31,38 @@ $.fn.fsearch = function(){
       else if(e.keyCode == 13){
         var id = $resultDiv.find('ul li.selected').attr('id');
         var name = $resultDiv.find('ul li.selected').find('.name').text();
-        $searchInput.val(name); 
+        $searchInput.val(id); 
         $resultDiv.fadeOut();// Here you get the id and name of the element selected. You can change this to redirect to any page too. Just like facebook.   
       } else {
       $resultDiv.fadeIn();
       $resultDiv.find('#search-footer').html("<img src='images/loading.gif' style='height:30px;width:30px;' alt='Collecting Data...'/>");
       
       // Query search details from database
-      $.getJSON("json.txt",{searchword: q},function(jsonResult)
+      $.getJSON("http://localhost:8080/AngelTwo/rest/status/"+q, function(jsonResult)
       { 
         var str='';
-        for(var i=0; i<jsonResult.length;i++)
-          {
-            str += '<li id=' + jsonResult[i].uid + ' class="option"><img class="profile_image" src="photos/'+jsonResult[i].media+
-            '" alt="'+jsonResult[i].username+'"/><span class="name">' + jsonResult[i].username + '</span><br/><span class="userdetails">'+jsonResult[i].country+'</span></li>';
-          }
+        for(var i=0; i<jsonResult.driver.result.length;i++){
+            str += '<div onclick=showDriverData("'+jsonResult.driver.result[i].username+'");> '+'<li id=' + jsonResult.driver.result[i].username + ' class="option"><img class="profile_image" src="http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/' 
+            + jsonResult.driver.result[i].username +
+            '.png " alt="'+jsonResult.driver.result[i].username+'"/><span class="name">' + jsonResult.driver.result[i].name + '</span><br/><span class="userdetails">'
+            +jsonResult.driver.result[i].contactNumber+'</span></li></div>';
+         }
+        
+        for(var i=0; i<jsonResult.vehicle.result.length;i++){
+            str += '<div onclick=showVehicleData("' + jsonResult.vehicle.result[i].uniqueId + '");> '+'<li id=' + jsonResult.vehicle.result[i].uniqueId + ' class="option"><img class="profile_image" src="http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/' + jsonResult.vehicle.result[i].uniqueId +
+            '.png " alt="' + jsonResult.vehicle.result[i].uniqueId + '"/><span class="name">' + jsonResult.vehicle.result[i].registrationNumber + '</span><br/><span class="userdetails">' +jsonResult.vehicle.result[i].uniqueId + '</span></li>';
+         }
+        
           $resultDiv.find('ul').empty().prepend(str);
-          $resultDiv.find('div#search-footer').text(jsonResult.length + " results found");
+          var lengthResults = jsonResult.vehicle.result.length +jsonResult.driver.result.length;
+          var resultString = " result";
+          if(lengthResults === 0){
+        	  lengthResults = "No ";
+          }
+          if(lengthResults > 1){
+        	  resultString+="s";
+          }
+          $resultDiv.find('div#search-footer').text(lengthResults + resultString+  " found");
           $resultDiv.find('ul li').first().addClass('selected');
       }); 
 

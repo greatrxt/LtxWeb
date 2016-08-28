@@ -50,5 +50,3 @@ function deleteVehicleData(){
     request.open ("DELETE", "http://localhost:8080/AngelTwo/rest/vehicle/" + vehicleUniqueId, true);
     request.send();
 }
-
-

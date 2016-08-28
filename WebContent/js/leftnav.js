@@ -11,7 +11,7 @@ function setMaxFromDate(){
 function fetchAndDisplayDriverData(username) {
 	closeLeftNav();
     document.getElementById("leftnav").style.width = "450px";
-    document.getElementById("wrapper").style.marginLeft = "450px";
+    //document.getElementById("wrapper").style.marginLeft = "450px";
     document.getElementById('nav-loading-data').style.display='block';
     document.getElementById('driver-data-display').style.display='none';
     document.getElementById('vehicle-data-display').style.display='none';
@@ -47,7 +47,7 @@ function fetchAndDisplayDriverData(username) {
 function fetchAndDisplayVehicleData(uniqueId){
 	closeLeftNav();
     document.getElementById("leftnav").style.width = "450px";
-    document.getElementById("wrapper").style.marginLeft = "450px";
+    //document.getElementById("wrapper").style.marginLeft = "450px";
     document.getElementById('nav-loading-data').style.display='block';
     document.getElementById('driver-data-display').style.display='none';
     document.getElementById('vehicle-data-display').style.display='none';
@@ -64,6 +64,7 @@ function fetchAndDisplayVehicleData(uniqueId){
 	                document.getElementById('vehicle-nav-image').src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/'+resp.result[0].uniqueId+".png";
 	                document.getElementById('vehicle-display-registration').value=resp.result[0].registrationNumber;
 	                document.getElementById('vehicle-display-uniqueId').value=resp.result[0].uniqueId;
+	                //document.getElementById('vehicle-display-driver').value=resp.result[0].driver;
                 } catch (e){
 	                var resp = {
 	                    status: 'error',
@@ -96,7 +97,7 @@ function fetchAndDisplayVehicleData(uniqueId){
 
 function closeLeftNav() {
     document.getElementById("leftnav").style.width = "0";
-    document.getElementById("wrapper").style.marginLeft= "0";
+    //document.getElementById("wrapper").style.marginLeft= "0";
     document.getElementById('driver-nav-image').value='';
     document.getElementById('driver-display-name').value='';
 	document.getElementById('driver-display-username').value='';

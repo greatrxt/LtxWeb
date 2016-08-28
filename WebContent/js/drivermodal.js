@@ -22,7 +22,7 @@ function closeDriverModal(){
 	document.getElementById('driver-name').value='';
 	document.getElementById('driver-username').value='';
 	document.getElementById('driver-password').value='';
-	document.getElementById('driver-confirmpassword').value='';
+	document.getElementById('driver-confirm-password').value='';
 	document.getElementById('driver-contact').value='';
 	document.getElementById('driver-doj').value='';
 	document.getElementById('driver-image-capture').value='';
@@ -51,9 +51,30 @@ function submitDriverData(){
     driver.name = document.getElementById('driver-name').value;
     driver.username = document.getElementById('driver-username').value;
     driver.password = document.getElementById('driver-password').value;
+    driver.confirmPassword = document.getElementById('driver-confirm-password').value;
     driver.contact = document.getElementById('driver-contact').value;
     driver.doj = document.getElementById('driver-doj').value;
     driver.image = driverImageInBase64;
+    
+    if(driver.name === ''){
+    	notifyUser('Name cannot be empty');
+    	return;
+    }
+    
+    if(driver.username === ''){
+    	notifyUser('Username cannot be empty');
+    	return;
+    }
+    
+    if(driver.password === ''){
+    	notifyUser('Password cannot be empty');
+    	return;
+    }
+    
+    if(driver.password != driver.confirmPassword ){
+    	notifyUser('Passwords do not match');
+    	return;
+    }
     
     var request = new XMLHttpRequest();
     request.onreadystatechange = function(){
@@ -72,8 +93,8 @@ function submitDriverData(){
                         status: 'error',
                         data: e.message
                     };
-                }
-                notifyUser(resp.status + ': ' + resp.data);
+                notifyUser(resp.status + ': ' + resp.data); 
+            }
         }
     };
 
@@ -83,7 +104,7 @@ function submitDriverData(){
         _progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
     }, false);
 
-    request.open ("POST", "http://localhost:8080/AngelTwo/rest/driver/form", true);
+    request.open ("POST", "http://localhost:8080/AngelTwo/rest/driver/", true);
     request.setRequestHeader("accept", "application/json");
     request.send(JSON.stringify(driver));
 }

@@ -142,6 +142,11 @@ function addVehicleIcon(vehicleUniqueId, toLat, toLng, bearing, registration, sp
 	
 	addEventListenersToMarker(marker, "Registration - "+registration + "<br />Date - " + time.split(" ")[0] + 
 			"<br />Time - " + time.split(" ")[1] + "<br />Speed - " + ( speed * 3.6 ) + " kmph", true);
+	
+	google.maps.event.addDomListener(marker, 'click', function() {
+		fetchAndDisplayVehicleData(vehicleUniqueId);
+	});  
+	  
 	marker.setMap(map);
 	clearMarkerAndBearingForVehicle(vehicleUniqueId);//clear old markers
 	saveMarkerAndBearingForVehicle(vehicleUniqueId, marker, bearing);
@@ -156,56 +161,52 @@ function showLastKnownLocationForAllVehicles(){
     var request = new XMLHttpRequest();
     request.onreadystatechange = function(){
         if(request.readyState == 4){
-//            try {
+           try {
                 var resp = JSON.parse(request.response);
                 var result = resp.result;
                 
                 if(result!='error'){
                 	allVehicleBounds = new google.maps.LatLngBounds();
-                	for(var l = 0; l < result.length; l++){
-                		var vehicleJson = result[l];
-                		
-                		var vehicleUniqueId = vehicleJson.uniqueId;
-                		var registration = vehicleJson.registration;
-                		var latitude = vehicleJson.location.mLatitude;
-                		var longitude = vehicleJson.location.mLongitude;
-                		var bearing = vehicleJson.location.mBearing;
-                		var speed = vehicleJson.location.mSpeed;
-                		var time = vehicleJson.location.mTime;
-                		
-                		if(latitude > 0 && longitude > 0){
-                			moveVehicleIconTo(vehicleUniqueId, latitude, longitude, bearing, registration, speed, time);
-//                			clearVehicleIconsOverlay(vehicleUniqueId);
-/*                			var marker = new google.maps.Marker({
-                				position:new google.maps.LatLng(latitude, longitude),
-                				icon: {
-                			        url: RotateIcon
-                			            .makeIcon(
-                			                'images/vehicle-icon.png')
-                			            .setRotation({deg: bearing})
-                			            .getUrl()
-                			    }
-                			});
-                			
-                			addEventListenersToMarker(marker, "Registration - "+registration + "<br />Date - " + time.split(" ")[0] + 
-                					"<br />Time - " + time.split(" ")[1] + "<br />Speed - " + ( speed * 3.6 ) + " kmph", true);
-                			marker.setMap(map);
-                			vehiclesHashmap[vehicleUniqueId] = marker;
-                			allVehicleBounds.extend(new google.maps.LatLng(latitude, longitude)); 
-                			map.fitBounds(allVehicleBounds);*/
-                		}
+                	if(result.length > 0){
+                    	for(var l = 0; l < result.length; l++){
+                    		var vehicleJson = result[l];
+                    		
+                    		var vehicleUniqueId = vehicleJson.uniqueId;
+                    		var registration = vehicleJson.registration;
+                    		var latitude = vehicleJson.location.mLatitude;
+                    		var longitude = vehicleJson.location.mLongitude;
+                    		var bearing = vehicleJson.location.mBearing;
+                    		var speed = vehicleJson.location.mSpeed;
+                    		var time = vehicleJson.location.mTime;
+                    		
+                    		if(latitude > 0 && longitude > 0){
+                    			/**
+                    			 * Uncomment to move vehicle to new location. Bit buggy.
+                    			 * moveVehicleIconTo(vehicleUniqueId, latitude, longitude, bearing, registration, speed, time);
+                    			 */
+                    			addVehicleIcon(vehicleUniqueId, latitude, longitude, bearing, registration, speed, time);
+                    		}
+                    	}
+                	} else {
+                		notifyUser("No Data");
+                		  if(timer!=null){
+                			  clearInterval(timer);
+                		  }  
                 	}
                 } else {
-                	notifyUser(result.error_message);
+                	notifyUser(resp.error_message);
+	          		  if(timer!=null){
+	        			  clearInterval(timer);
+	        		  }  
                 }
                 
-/*            } catch (e){
+            } catch (e){
                 var resp = {
                     status: 'error',
                     data: e.message
                 };
                 notifyUser(resp.status + ': ' + resp.data);
-            }*/
+            }
         }
     };
 
@@ -216,7 +217,7 @@ function showLastKnownLocationForAllVehicles(){
 $(document).ready(function(){
 	addOsmSupport();	
 	initiateSearch();	
-	  timer = setInterval(function(){
+	timer = setInterval(function(){
 		  showLastKnownLocationForAllVehicles();
 	  }, 5000);		
 });

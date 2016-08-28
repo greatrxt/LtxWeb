@@ -1,15 +1,20 @@
-.sidenavcontainer{
-	height: 100%;
-    width: 0;
+.sidenavcontainer {
+	/* height: 100px; */
+    width: 20px;
+    right: 0;
     opacity: 0.5;
     position: fixed;
     z-index: 14;
-    top: 0;
+    top: 35%;
     background-color: #111;
     overflow-x: hidden;
-    transition: 0.0s;
-    padding-top: 60px;
+    transition: 0.5s;
 }
+
+.sidenavcontainer:HOVER {
+    opacity: 1.0;
+}
+
 .sidenav {
     height: 100%;
     width: 0;
@@ -27,7 +32,7 @@
 .sidenav a {
     padding: 0px 0px 0px 0px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 18px;
     color: #818181;
     display: block;
     transition: 0.3s
@@ -54,9 +59,17 @@
 	height:80px;
 }
 
-#tab-result ul li:hover {
-	cursor: pointer;
-	background-color: #333333;
+#tab-result ul li.activeItem:hover {
+ 	cursor: pointer;
+	background-color: #333333; 
+}
+
+#tab-result ul li.muteItem:hover {
+ 	cursor: pointer;
+}
+
+#tab-result li.muteItem span:hover {
+ 	color: #4285f4;
 }
 
 #tab-result ul li.selected {
@@ -66,7 +79,7 @@
 }
 
 #tab-result .name {
-	font-size: 24px;
+	font-size: 18px;
 	color: #999;
 	padding-bottom:5px;
 	padding-left:10px; 
@@ -75,7 +88,7 @@
 }
 
 #tab-result .userdetails {
-	font-size: 18px;
+	font-size: 15px;
 	color: #777;
 	padding-left:10px;
 	font-family: helvetica, arial, sans-serif;
@@ -133,7 +146,7 @@
 }
 
 .tab-padding-tiny{padding:2px 4px!important}.tab-padding-small{padding:4px 8px!important}
-.tab-padding-medium,.tab-padding,.tab-form{padding:8px 16px!important}
+.tab-padding-medium,.tab-padding,.tab-form{padding:3% 4%!important}
 .tab-padding-large{padding:12px 24px!important}.tab-padding-xlarge{padding:16px 32px!important}
 .tab-padding-xxlarge{padding:24px 48px!important}.tab-padding-jumbo{padding:32px 64px!important}
 .tab-padding-4{padding-top:4px!important;padding-bottom:4px!important}

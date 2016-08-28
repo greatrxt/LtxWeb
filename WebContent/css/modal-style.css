@@ -82,7 +82,8 @@
 }
 
 .modal-body {
-	padding: 16px 16px;
+	padding: 3%;
+	width:94%;
 	display:inline-block;
 	background-color: #fefefe;
 }

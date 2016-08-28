@@ -1,20 +1,34 @@
 
 $(document).ready(function(){	
 	// When the user clicks anywhere outside of the modal, close it
-	window.onclick = function(event) {
+/*	window.onclick = function(event) {
 	    if (event.target == document.getElementById('contentnavcontainer')) {
-	    	closeNav();
+	    	toggleNav();
 	    }
-	}
+	}*/
 })
 function openNav() {
-	document.getElementById("contentnavcontainer").style.width = '100%';
-    document.getElementById("contentnav").style.width = '450px';
+	document.getElementById("contentnavcontainer").style.width = '370px';
+	document.getElementById("sideNavCloseButton").className = 'fa fa-chevron-right';
+    document.getElementById("contentnav").style.width = '350px';
     displayVehicles();
 }
 
+$(document).ready(function(){
+	openNav();		
+});
+
+function toggleNav(){
+	if(document.getElementById("contentnav").style.width === '0px'){
+		openNav();
+	} else {
+		closeNav();
+	}
+}
+
 function closeNav() {
-	document.getElementById("contentnavcontainer").style.width = '0';
+	document.getElementById("contentnavcontainer").style.width = '23px';
+	document.getElementById("sideNavCloseButton").className = 'fa fa-chevron-left';
     document.getElementById("contentnav").style.width = '0';
 }
 
@@ -55,12 +69,12 @@ function displayDrivers(){
 }
 
 function showDriverData(username){
-	closeNav();
+	//closeNav();
 	fetchAndDisplayDriverData(username); //in leftnav.js
 }
 
 function showVehicleData(uniqueId){
-	closeNav();
+	//closeNav();
 	fetchAndDisplayVehicleData(uniqueId); //in leftnav.js
 }
 
@@ -102,15 +116,20 @@ function fetchData(type){
 }
 
 function displayVehiclesData(dataDiv, resp){
-	var str = "<ul><div onclick='openVehicleModal();'><li style='padding-top:30px; height:50px;'><span class='name'>Add New Vehicle</span></li></div>";
+	var str = "<ul><div onclick='openVehicleModal();'><li class='muteItem' style='height:25px;'><span class='name'>Add New Vehicle</span></li></div>";
 	if(resp.result != 'error'){
     	var vehiclesArray = resp.result;
     	
-    	str+="<li style='padding-top:30px; height:60px;'><span class='name' style='color:#4CAF50'>"+vehiclesArray.length+" vehicles found</span></li></ul><ul style='height:600px;'>";
-    	
+    	if(vehiclesArray.length === 0){
+    		str+="<li class='infoItem' style='padding-top:30px; height:25px;'><span class='name' style='color:#4CAF50'>No Vehicle Found</span></li></ul><ul style='height:600px;'>";
+    	} else if (vehiclesArray.length === 1){
+    		str+="<li class='infoItem' style='padding-top:30px; height:25px;'><span class='name' style='color:#4CAF50'>"+vehiclesArray.length+" Vehicle Found</span></li></ul><ul style='height:600px;'>";
+    	} else {
+    		str+="<li class='infoItem' style='padding-top:30px; height:25px;'><span class='name' style='color:#4CAF50'>"+vehiclesArray.length+" Vehicles Found</span></li></ul><ul style='height:600px;'>";
+    	}
     	for(var i = 0; i < vehiclesArray.length; i++){
     		var vehicle = vehiclesArray[i];
-    		str+="<div onclick=showVehicleData('"+vehicle.uniqueId+"');><li><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/"+vehicle.uniqueId+".png' alt='"
+    		str+="<div onclick=showVehicleData('"+vehicle.uniqueId+"');><li class='activeItem'><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/"+vehicle.uniqueId+".png' alt='"
     				+ vehicle.registrationNumber+"'/>"	+ "<span class='name'>" + vehicle.registrationNumber + "</span><br/><span class='userdetails'>" + " Current Location " + "</span></li></div>"
     	}
         
@@ -123,15 +142,15 @@ function displayVehiclesData(dataDiv, resp){
 }
 
 function displayDriversData(dataDiv, resp){
-	var str = "<ul><div onclick='openDriverModal();'><li style='padding-top:30px; height:50px;'><span class='name'>Add New Driver</span></li></div>";
+	var str = "<ul><div onclick='openDriverModal();'><li class='muteItem' style='height:25px;'><span class='name'>Add New Driver</span></li></div>";
 	if(resp.result != 'error'){
     	var driversArray = resp.result;
     	
-    	str+="<li style='padding-top:30px; height:60px;'><span class='name' style='color:#4CAF50'>"+driversArray.length+" drivers found</span></li></ul><ul style='height:600px;'>";
+    	str+="<li class='infoItem' style='padding-top:30px; height:25px;'><span class='name' style='color:#4CAF50'>"+driversArray.length+" drivers found</span></li></ul><ul style='height:600px;'>";
     	
     	for(var i = 0; i < driversArray.length; i++){
     		var driver = driversArray[i];
-    		str+="<div onclick=showDriverData('"+driver.username+"');><li><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/"+driver.username+".png' alt='"+driver.username+"'/>"
+    		str+="<div onclick=showDriverData('"+driver.username+"');><li class='activeItem'><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/"+driver.username+".png' alt='"+driver.username+"'/>"
     			+"<span class='name'>"+driver.name+"</span><br/><span class='userdetails'>"+driver.contactNumber+"</span></li></div>"
     	}
         

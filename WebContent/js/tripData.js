@@ -325,7 +325,7 @@ function drawSimplePolylineWithRawPoints(response){
 				  prefix = "End - ";
 			  addEventListenersToMarker(marker, prefix + locationJson.mTime, true); //show fixed markers for 1st and last point
 		  } else {
-			  addEventListenersToMarker(marker, "Date - " + locationJson.mTime.split(" ")[0] + "<br /> Time - " + locationJson.mTime.split(" ")[1] + "<br />Speed - " + (locationJson.mSpeed * 3.6) + " kmph", false);	//show temp marker for other points
+			  addEventListenersToMarker(marker, " Driven by - " + locationJson.driver + "<br />  Date - " + locationJson.mTime.split(" ")[0] + "<br /> Time - " + locationJson.mTime.split(" ")[1] + "<br />Speed - " + (locationJson.mSpeed * 3.6) + " kmph", false);	//show temp marker for other points
 		  }
 	  
 	  }
