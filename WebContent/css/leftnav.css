@@ -1,8 +1,26 @@
+
+.leftnavcontainer {
+	/* height: 100px; */
+    width: 0px;
+    left: 0;
+    opacity: 0.5;
+    position: fixed;
+    z-index: 14;
+    top: 35%;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+.leftnavcontainer:HOVER {
+    opacity: 1.0;
+}
+
 .leftnav {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 10;
+    z-index: 15;
     top: 0;
     left: 0;
     background-color: #111;

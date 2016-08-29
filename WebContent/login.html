@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>1Qubit ltX</title>
+        <link rel="icon" href="images/favicon.ico" type="image/gif" sizes="16x16">
+        <link rel="stylesheet" href="css/login-style.css">
+        <script type="text/javascript" src="js/login.js"></script>
+    </head>
+    <body>
+  	<div id = "background">
+
+  		<div id = "login-sequence-1" class="login_sequence">
+  					<span>Enter your Company's Name</span><br><input id="user-company-name" type="text" tabindex="1" 
+						placeholder="Example: 1Qubit"><br>						
+			<input id="go-to-login-seq-2" class = "login-seq-button" type="button" value="Continue"tabindex="2" onclick="nextLoginSeq();"> 			
+  		</div>
+  		
+  		<div id = "login-sequence-2" class="login_sequence" style="margin-left: 100%">
+			<span>Your Email Address</span><input id="user-email-address" type="text" tabindex="1" 
+						placeholder=""><br>
+			<span>Password</span><br><input id="user-password" type="text" tabindex="2" 
+						placeholder=""><br>						
+			<input id="submit-data" class = "login-seq-button" type="button" value="Login"tabindex="3"> 		
+  		</div>		
+		
+  		
+  	</div>
+    </body>
+</html>

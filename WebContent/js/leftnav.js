@@ -10,12 +10,14 @@ function setMaxFromDate(){
 
 function fetchAndDisplayDriverData(username) {
 	closeLeftNav();
-    document.getElementById("leftnav").style.width = "450px";
+    //document.getElementById("leftnav").style.width = "450px";
     //document.getElementById("wrapper").style.marginLeft = "450px";
+	maximizeLeftNav();
     document.getElementById('nav-loading-data').style.display='block';
     document.getElementById('driver-data-display').style.display='none';
     document.getElementById('vehicle-data-display').style.display='none';
     document.getElementById('driver-nav-image').style.display='none';
+   
     
     var request = new XMLHttpRequest();
     request.onreadystatechange = function(){
@@ -25,10 +27,10 @@ function fetchAndDisplayDriverData(username) {
         	document.getElementById('driver-nav-image').style.display='block';
             try {
                 var resp = JSON.parse(request.response);
-                document.getElementById('driver-nav-image').src='http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/'+resp.result[0].username+".png";
-                document.getElementById('driver-display-name').value=resp.result[0].name;
-                document.getElementById('driver-display-username').value=resp.result[0].username;
-                document.getElementById('driver-display-contact').value=resp.result[0].contactNumber;
+                document.getElementById('driver-nav-image').src = base_url + resp.result[0].image;
+                document.getElementById('driver-display-name').value = resp.result[0].name;
+                document.getElementById('driver-display-username').value = resp.result[0].username;
+                document.getElementById('driver-display-contact').value = resp.result[0].contactNumber;
                 } catch (e){
                 var resp = {
                     status: 'error',
@@ -38,7 +40,7 @@ function fetchAndDisplayDriverData(username) {
         }
     };
 
-    request.open ("GET", "http://localhost:8080/AngelTwo/rest/driver/"+username, true);
+    request.open ("GET", "http://localhost:8080/AngelTwo/driver/"+username, true);
     request.setRequestHeader("accept", "application/json");
     request.send();
     
@@ -46,7 +48,8 @@ function fetchAndDisplayDriverData(username) {
 
 function fetchAndDisplayVehicleData(uniqueId){
 	closeLeftNav();
-    document.getElementById("leftnav").style.width = "450px";
+    //document.getElementById("leftnav").style.width = "450px";
+	maximizeLeftNav();
     //document.getElementById("wrapper").style.marginLeft = "450px";
     document.getElementById('nav-loading-data').style.display='block';
     document.getElementById('driver-data-display').style.display='none';
@@ -61,7 +64,7 @@ function fetchAndDisplayVehicleData(uniqueId){
         	document.getElementById('vehicle-nav-image').style.display='block';
             try {
 	                var resp = JSON.parse(request.response);
-	                document.getElementById('vehicle-nav-image').src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/'+resp.result[0].uniqueId+".png";
+	                document.getElementById('vehicle-nav-image').src = base_url + resp.result[0].image;
 	                document.getElementById('vehicle-display-registration').value=resp.result[0].registrationNumber;
 	                document.getElementById('vehicle-display-uniqueId').value=resp.result[0].uniqueId;
 	                //document.getElementById('vehicle-display-driver').value=resp.result[0].driver;
@@ -74,7 +77,7 @@ function fetchAndDisplayVehicleData(uniqueId){
         }
     };
 
-    request.open ("GET", "http://localhost:8080/AngelTwo/rest/vehicle/"+uniqueId, true);
+    request.open ("GET", "http://localhost:8080/AngelTwo/vehicle/"+uniqueId, true);
     request.setRequestHeader("accept", "application/json");
     request.send();
     
@@ -95,6 +98,27 @@ function fetchAndDisplayVehicleData(uniqueId){
     document.getElementById("vehicle-display-from-date").setAttribute("max", today);
 } 
 
+
+function toggleLeftNav(){
+	if(document.getElementById("leftnav").style.width === '0px'){
+		maximizeLeftNav();
+	} else {
+		minimizeLeftNav();
+	}
+}
+
+function maximizeLeftNav(){
+	document.getElementById("leftnav").style.width = "450px";
+	document.getElementById("leftNavCloseButton").className = 'fa fa-chevron-left';
+	document.getElementById('left-nav-container').style.width="470px";
+}
+
+function minimizeLeftNav(){
+	document.getElementById("leftnav").style.width = "0px";
+	document.getElementById("leftNavCloseButton").className = 'fa fa-chevron-right';
+	document.getElementById('left-nav-container').style.width='20px';
+}
+
 function closeLeftNav() {
     document.getElementById("leftnav").style.width = "0";
     //document.getElementById("wrapper").style.marginLeft= "0";
@@ -109,5 +133,6 @@ function closeLeftNav() {
 	document.getElementById('vehicle-display-to-date').value='';
 	document.getElementById("vehicle-display-to-date").min = '';
 	document.getElementById("vehicle-display-from-date").max = '';
+	document.getElementById('left-nav-container').style.width='0px';
 	reset();
 }

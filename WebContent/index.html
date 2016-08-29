@@ -27,6 +27,8 @@
     </head>
     <body>
     <img id="vehicle_icon_holder" src="images/vehicle-icon.png" style="display: none;"/><!-- do NOT delete. Used for showing CAR marker rotation -->
+    
+
     	<div id="leftnav" class="leftnav">
     	<a href="javascript:void(0)" class="closebtn" onclick="closeLeftNav()">&times;</a>
 		<div id="nav-loading-data"></div>
@@ -67,6 +69,10 @@
 		 </div>
 
     	</div>
+    	
+    	<div id="left-nav-container" class = "leftnavcontainer" onclick="toggleLeftNav()">
+			 <i id="leftNavCloseButton" class="fa fa-chevron-right" aria-hidden="true" style="color: #FFFFFF; margin:44px 5px; float:right"></i> 
+		</div>
 		<div id="wrapper">
 			<div id="search">
 				<input id="search-text" autocomplete="off" autofocus="" name="search_query" value="" type="text" tabindex="1" 

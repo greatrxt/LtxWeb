@@ -47,6 +47,6 @@ function deleteVehicleData(){
         }
     };
 
-    request.open ("DELETE", "http://localhost:8080/AngelTwo/rest/vehicle/" + vehicleUniqueId, true);
+    request.open ("DELETE", "http://localhost:8080/AngelTwo/vehicle/" + vehicleUniqueId, true);
     request.send();
 }

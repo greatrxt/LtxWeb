@@ -1,3 +1,5 @@
+var base_url = "http://localhost:8080";
+
 var RotateIcon = function(options){
     this.options = options || {};
     this.rImg = options.img || new Image();
@@ -210,7 +212,7 @@ function showLastKnownLocationForAllVehicles(){
         }
     };
 
-    request.open ("GET", "http://localhost:8080/AngelTwo/rest/location", true);
+    request.open ("GET", "http://localhost:8080/AngelTwo/location", true);
     request.send();
 }
 

@@ -38,19 +38,19 @@ $.fn.fsearch = function(){
       $resultDiv.find('#search-footer').html("<img src='images/loading.gif' style='height:30px;width:30px;' alt='Collecting Data...'/>");
       
       // Query search details from database
-      $.getJSON("http://localhost:8080/AngelTwo/rest/status/"+q, function(jsonResult)
+      $.getJSON("http://localhost:8080/AngelTwo/status/"+q, function(jsonResult)
       { 
         var str='';
         for(var i=0; i<jsonResult.driver.result.length;i++){
-            str += '<div onclick=showDriverData("'+jsonResult.driver.result[i].username+'");> '+'<li id=' + jsonResult.driver.result[i].username + ' class="option"><img class="profile_image" src="http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/' 
-            + jsonResult.driver.result[i].username +
-            '.png " alt="'+jsonResult.driver.result[i].username+'"/><span class="name">' + jsonResult.driver.result[i].name + '</span><br/><span class="userdetails">'
+            str += '<div onclick=showDriverData("'+jsonResult.driver.result[i].username+'");> '+'<li id=' + jsonResult.driver.result[i].username + ' class="option"><img class="profile_image" src="' + base_url + 
+            jsonResult.driver.result[i].image +
+            ' " alt="'+jsonResult.driver.result[i].username+'"/><span class="name">' + jsonResult.driver.result[i].name + '</span><br/><span class="userdetails">'
             +jsonResult.driver.result[i].contactNumber+'</span></li></div>';
          }
         
         for(var i=0; i<jsonResult.vehicle.result.length;i++){
-            str += '<div onclick=showVehicleData("' + jsonResult.vehicle.result[i].uniqueId + '");> '+'<li id=' + jsonResult.vehicle.result[i].uniqueId + ' class="option"><img class="profile_image" src="http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/' + jsonResult.vehicle.result[i].uniqueId +
-            '.png " alt="' + jsonResult.vehicle.result[i].uniqueId + '"/><span class="name">' + jsonResult.vehicle.result[i].registrationNumber + '</span><br/><span class="userdetails">' +jsonResult.vehicle.result[i].uniqueId + '</span></li>';
+            str += '<div onclick=showVehicleData("' + jsonResult.vehicle.result[i].uniqueId + '");> '+'<li id=' + jsonResult.vehicle.result[i].uniqueId + ' class="option"><img class="profile_image" src="' + base_url + jsonResult.vehicle.result[i].image +
+            ' " alt="' + jsonResult.vehicle.result[i].uniqueId + '"/><span class="name">' + jsonResult.vehicle.result[i].registrationNumber + '</span><br/><span class="userdetails">' +jsonResult.vehicle.result[i].uniqueId + '</span></li>';
          }
         
           $resultDiv.find('ul').empty().prepend(str);

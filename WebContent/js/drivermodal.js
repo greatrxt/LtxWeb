@@ -104,7 +104,7 @@ function submitDriverData(){
         _progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
     }, false);
 
-    request.open ("POST", "http://localhost:8080/AngelTwo/rest/driver/", true);
+    request.open ("POST", "http://localhost:8080/AngelTwo/driver/", true);
     request.setRequestHeader("accept", "application/json");
     request.send(JSON.stringify(driver));
 }

@@ -96,7 +96,7 @@ function reset(){
  * @returns
  */
 function fetchVehicleData(){
-	  //var url = "http://localhost:8080/AngelTwo/rest/status/vehicle/100/10000";
+	  //var url = "http://localhost:8080/AngelTwo/status/vehicle/100/10000";
 	  var vehicleUniqueId = document.getElementById('vehicle-display-uniqueId').value;
 	  var fromDate = document.getElementById('vehicle-display-from-date').value;
 	  var toDate = document.getElementById('vehicle-display-to-date').value;
@@ -106,7 +106,7 @@ function fetchVehicleData(){
 		  reset();
 		  return;
 	  }
-	  var url = "http://localhost:8080/AngelTwo/rest/location/vehicle/" + vehicleUniqueId + "/" + fromDate + "/" + toDate;
+	  var url = "http://localhost:8080/AngelTwo/location/vehicle/" + vehicleUniqueId + "/" + fromDate + "/" + toDate;
 	  var xmlhttp = new XMLHttpRequest();
 
 	  xmlhttp.onreadystatechange = function() {

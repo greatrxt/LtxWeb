@@ -21,7 +21,7 @@ function editDriverData(){
                 	if(driver.hasOwnProperty('dateOfJoining')){
                 		document.getElementById('edit-driver-doj').value = driver.dateOfJoining;
                 	}
-                	document.getElementById('edit-driver-image').src = 'http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/' + driver.username+'.png';
+                	document.getElementById('edit-driver-image').src = base_url +driver.image;
                     document.getElementById('clearEditDriverImageButton').style.display='block';
                     document.getElementById('edit-driver-image-capture').style.display='none';
                 	openEditDriverModal();
@@ -38,7 +38,7 @@ function editDriverData(){
         }
     };
 
-    request.open ("GET", "http://localhost:8080/AngelTwo/rest/driver/" + username, true);
+    request.open ("GET", "http://localhost:8080/AngelTwo/driver/" + username, true);
     request.setRequestHeader("accept", "application/json");
     request.send();
 }
@@ -102,7 +102,7 @@ function submitEditedDriverData(){
         _progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
     }, false);*/
 
-    request.open ("PUT", "http://localhost:8080/AngelTwo/rest/driver/", true);
+    request.open ("PUT", "http://localhost:8080/AngelTwo/driver/", true);
     request.setRequestHeader("accept", "application/json");
     request.send(JSON.stringify(driver));
 }

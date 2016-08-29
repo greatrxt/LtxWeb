@@ -110,7 +110,7 @@ function fetchData(type){
         }
     };
 
-    request.open ("GET", "http://localhost:8080/AngelTwo/rest/"+type, true);
+    request.open ("GET", "http://localhost:8080/AngelTwo/"+type, true);
     request.setRequestHeader("accept", "application/json");
     request.send();
 }
@@ -129,7 +129,7 @@ function displayVehiclesData(dataDiv, resp){
     	}
     	for(var i = 0; i < vehiclesArray.length; i++){
     		var vehicle = vehiclesArray[i];
-    		str+="<div onclick=showVehicleData('"+vehicle.uniqueId+"');><li class='activeItem'><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/"+vehicle.uniqueId+".png' alt='"
+    		str+="<div onclick=showVehicleData('"+vehicle.uniqueId+"');><li class='activeItem'><img class='profile_image' src='" + base_url +vehicle.image+"' alt='"
     				+ vehicle.registrationNumber+"'/>"	+ "<span class='name'>" + vehicle.registrationNumber + "</span><br/><span class='userdetails'>" + " Current Location " + "</span></li></div>"
     	}
         
@@ -150,7 +150,7 @@ function displayDriversData(dataDiv, resp){
     	
     	for(var i = 0; i < driversArray.length; i++){
     		var driver = driversArray[i];
-    		str+="<div onclick=showDriverData('"+driver.username+"');><li class='activeItem'><img class='profile_image' src='http://localhost:8080/AngelTwo/AngelTwo/uploads/driver_images/"+driver.username+".png' alt='"+driver.username+"'/>"
+    		str+="<div onclick=showDriverData('"+driver.username+"');><li class='activeItem'><img class='profile_image' src='" + base_url + driver.image+"' alt='"+driver.username+"'/>"
     			+"<span class='name'>"+driver.name+"</span><br/><span class='userdetails'>"+driver.contactNumber+"</span></li></div>"
     	}
         

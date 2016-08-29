@@ -17,7 +17,7 @@ function editVehicleData(){
                 	var vehicle = resp.result[0];
                 	document.getElementById('edit-vehicle-registration').value = vehicle.registrationNumber;
                 	document.getElementById('edit-vehicle-uniqueId').value = vehicle.uniqueId;
-                	document.getElementById('edit-vehicle-image').src = 'http://localhost:8080/AngelTwo/AngelTwo/uploads/vehicle_images/' + vehicle.uniqueId+'.png';
+                	document.getElementById('edit-vehicle-image').src = base_url +vehicle.image;
                     document.getElementById('clearEditVehicleImageButton').style.display='block';
                     document.getElementById('edit-vehicle-image-capture').style.display='none';
                 	openEditVehicleModal();
@@ -34,7 +34,7 @@ function editVehicleData(){
         }
     };
 
-    request.open ("GET", "http://localhost:8080/AngelTwo/rest/vehicle/" + uniqueId, true);
+    request.open ("GET", "http://localhost:8080/AngelTwo/vehicle/" + uniqueId, true);
     request.setRequestHeader("accept", "application/json");
     request.send();
 }
@@ -88,7 +88,7 @@ function submitEditedVehicleData(){
         _progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
     }, false);
 
-    request.open ("PUT", "http://localhost:8080/AngelTwo/rest/vehicle/", true);
+    request.open ("PUT", "http://localhost:8080/AngelTwo/vehicle/", true);
     request.setRequestHeader("accept", "application/json");
     request.send(JSON.stringify(vehicle));
 }

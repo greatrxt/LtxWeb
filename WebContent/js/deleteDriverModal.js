@@ -47,7 +47,7 @@ function deleteDriverData(){
         }
     };
 
-    request.open ("DELETE", "http://localhost:8080/AngelTwo/rest/driver/" + driverusername, true);
+    request.open ("DELETE", "http://localhost:8080/AngelTwo/driver/" + driverusername, true);
     request.send();
 }
 

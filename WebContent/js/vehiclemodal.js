@@ -76,7 +76,7 @@ function submitVehicleData(){
         _progress.style.width = Math.ceil(e.loaded/e.total) * 100 + '%';
     }, false);
 
-    request.open ("POST", "http://localhost:8080/AngelTwo/rest/vehicle/", true);
+    request.open ("POST", "http://localhost:8080/AngelTwo/vehicle/", true);
     request.setRequestHeader("accept", "application/json");
     request.send(JSON.stringify(vehicle));
 }
